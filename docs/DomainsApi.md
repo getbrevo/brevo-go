@@ -24,7 +24,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AuthenticateDomainModel**](authenticateDomainModel.md)
+[**AuthenticateDomainModel**](AuthenticateDomainModel.md)
 
 ### Authorization
 
@@ -57,7 +57,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateDomainModel**](createDomainModel.md)
+[**CreateDomainModel**](CreateDomainModel.md)
 
 ### Authorization
 
@@ -109,7 +109,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetDomainonfigurationModel**](getDomainonfigurationModel.md)
+[**GetDomainonfigurationModel**](GetDomainonfigurationModel.md)
 
 ### Authorization
 
@@ -131,7 +131,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetDomainsList**](getDomainsList.md)
+[**GetDomainsList**](GetDomainsList.md)
 
 ### Authorization
 

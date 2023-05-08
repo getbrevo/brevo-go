@@ -25,7 +25,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**MasterDetailsResponse**](masterDetailsResponse.md)
+[**MasterDetailsResponse**](MasterDetailsResponse.md)
 
 ### Authorization
 
@@ -54,7 +54,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SubAccountsResponse**](subAccountsResponse.md)
+[**SubAccountsResponse**](SubAccountsResponse.md)
 
 ### Authorization
 
@@ -108,7 +108,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SubAccountDetailsResponse**](subAccountDetailsResponse.md)
+[**SubAccountDetailsResponse**](SubAccountDetailsResponse.md)
 
 ### Authorization
 
@@ -165,7 +165,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateApiKeyResponse**](createApiKeyResponse.md)
+[**CreateApiKeyResponse**](CreateApiKeyResponse.md)
 
 ### Authorization
 
@@ -193,7 +193,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateSubAccountResponse**](createSubAccountResponse.md)
+[**CreateSubAccountResponse**](CreateSubAccountResponse.md)
 
 ### Authorization
 
@@ -221,7 +221,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSsoToken**](getSsoToken.md)
+[**GetSsoToken**](GetSsoToken.md)
 
 ### Authorization
 

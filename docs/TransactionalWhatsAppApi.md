@@ -37,7 +37,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetWhatsappEventReport**](getWhatsappEventReport.md)
+[**GetWhatsappEventReport**](GetWhatsappEventReport.md)
 
 ### Authorization
 
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2012**](inlineResponse2012.md)
+[**InlineResponse2012**](InlineResponse2012.md)
 
 ### Authorization
 
