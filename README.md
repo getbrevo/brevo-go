@@ -15,7 +15,7 @@ For more information, please visit [https://account.brevo.com/support](https://a
 ## Installation & Usage
 Install the package to your GoLang project.
 ```golang
-go get github.com/getbrevo/brevo-go/v2
+go get github.com/getbrevo/brevo-go
 ```
 
 ## Getting Started
