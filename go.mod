@@ -1,4 +1,4 @@
-module github.com/sendinblue/APIv3-go-library/v2
+module github.com/getbrevo/brevo-go
 
 go 1.17
 
