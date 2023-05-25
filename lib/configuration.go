@@ -63,7 +63,7 @@ func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		BasePath:      "https://api.brevo.com/v3",
 		DefaultHeader: make(map[string]string),
-		UserAgent:     "Swagger-Codegen/1.0.0/go",
+		UserAgent:     "brevo_clientAPI/v1.0.0/go",
 	}
 	return cfg
 }

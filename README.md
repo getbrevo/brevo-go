@@ -26,7 +26,7 @@ package main
 import (
 	"fmt"
 	"context"
-    brevo "github.com/getbrevo/brevo-go/v2/lib"
+    brevo "github.com/getbrevo/brevo-go/lib"
 )
 
 func main() {
