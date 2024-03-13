@@ -36,7 +36,7 @@ type GetProductDetails struct {
 	// S3 thumbnail url of original image in 120x120 dimension for analytics section
 	S3ThumbAnalytics string `json:"s3ThumbAnalytics"`
 	// Meta data of product such as description, vendor, producer, stock level, etc.
-	MetaInfo *interface{} `json:"metaInfo,omitempty"`
+	MetaInfo map[string]interface{} `json:"metaInfo,omitempty"`
 	// S3 thumbnail url of original image in 600x400 dimension for editor section
 	S3ThumbEditor string `json:"s3ThumbEditor"`
 	// product deleted from the shop's database

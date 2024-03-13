@@ -67,7 +67,7 @@ type GetEmailCampaign struct {
 	// Sent UTC date-time of the campaign (YYYY-MM-DDTHH:mm:ss.SSSZ). Only available if 'status' of the campaign is 'sent'
 	SentDate string `json:"sentDate,omitempty"`
 	// Total number of non-delivered campaigns for a particular campaign id.
-	ReturnBounce int64        `json:"returnBounce,omitempty"`
-	Recipients   *interface{} `json:"recipients"`
-	Statistics   *interface{} `json:"statistics"`
+	ReturnBounce int64                  `json:"returnBounce,omitempty"`
+	Recipients   map[string]interface{} `json:"recipients"`
+	Statistics   map[string]interface{} `json:"statistics"`
 }

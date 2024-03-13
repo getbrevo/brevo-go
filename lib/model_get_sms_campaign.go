@@ -26,7 +26,7 @@ type GetSmsCampaign struct {
 	// Creation UTC date-time of the SMS campaign (YYYY-MM-DDTHH:mm:ss.SSSZ)
 	CreatedAt string `json:"createdAt"`
 	// UTC date-time of last modification of the SMS campaign (YYYY-MM-DDTHH:mm:ss.SSSZ)
-	ModifiedAt string       `json:"modifiedAt"`
-	Recipients *interface{} `json:"recipients"`
-	Statistics *interface{} `json:"statistics"`
+	ModifiedAt string                 `json:"modifiedAt"`
+	Recipients map[string]interface{} `json:"recipients"`
+	Statistics map[string]interface{} `json:"statistics"`
 }

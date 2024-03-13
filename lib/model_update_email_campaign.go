@@ -44,7 +44,7 @@ type UpdateEmailCampaign struct {
 	// Customize the utm_campaign value. If this field is empty, the campaign name will be used. Only alphanumeric characters and spaces are allowed
 	UtmCampaign string `json:"utmCampaign,omitempty"`
 	// Pass the set of attributes to customize the type 'classic' campaign. For example, {\"FNAME\":\"Joe\", \"LNAME\":\"Doe\"}. The 'params' field will get updated, only if the campaign is in New Template Language, else ignored. The New Template Language is dependent on the values of 'subject', 'htmlContent/htmlUrl', 'sender.name' & 'toField'
-	Params *interface{} `json:"params,omitempty"`
+	Params map[string]interface{} `json:"params,omitempty"`
 	// Set this to true if you want to send your campaign at best time. Note:- if true, warmup ip will be disabled.
 	SendAtBestTime bool `json:"sendAtBestTime,omitempty"`
 	// Status of A/B Test. abTesting = false means it is disabled, & abTesting = true means it is enabled. 'subjectA', 'subjectB', 'splitRule', 'winnerCriteria' & 'winnerDelay' will be considered if abTesting is set to true. 'subject' if passed is ignored.  Can be set to true only if 'sendAtBestTime' is 'false'. You will be able to set up two subject lines for your campaign and send them to a random sample of your total recipients. Half of the test group will receive version A, and the other half will receive version B

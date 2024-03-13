@@ -25,7 +25,7 @@ type Note struct {
 	// Deal ids linked to a note
 	DealIds []string `json:"dealIds,omitempty"`
 	// Account details of user which created the note
-	AuthorId *interface{} `json:"authorId,omitempty"`
+	AuthorId map[string]interface{} `json:"authorId,omitempty"`
 	// Note created date/time
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	// Note updated date/time
