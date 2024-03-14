@@ -30,4 +30,6 @@ type RequestContactImport struct {
 	UpdateExistingContacts bool `json:"updateExistingContacts,omitempty"`
 	// To facilitate the choice to erase any attribute of the existing contacts with empty value. emptyContactsAttributes = true means the empty fields in your import will erase any attribute that currently contain data in Brevo, & emptyContactsAttributes = false means the empty fields will not affect your existing data ( only available if `updateExistingContacts` set to true )
 	EmptyContactsAttributes bool `json:"emptyContactsAttributes,omitempty"`
+	// To disable email notification
+	DisableNotification bool `json:"disableNotification,omitempty"`
 }
