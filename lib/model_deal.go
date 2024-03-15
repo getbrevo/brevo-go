@@ -15,7 +15,7 @@ type Deal struct {
 	// Unique deal id
 	Id string `json:"id,omitempty"`
 	// Deal attributes with values
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	// Contact ids for contacts linked to this deal
 	LinkedContactsIds []int32 `json:"linkedContactsIds,omitempty"`
 	// Companies ids for companies linked to this deal

@@ -12,7 +12,7 @@ package lib
 
 type GetExtendedCampaignStats struct {
 	// Overall statistics of the campaign
-	GlobalStats *interface{} `json:"globalStats"`
+	GlobalStats map[string]interface{} `json:"globalStats"`
 	// List-wise statistics of the campaign.
 	CampaignStats []interface{} `json:"campaignStats"`
 	// Number of clicks on mirror link
@@ -20,8 +20,8 @@ type GetExtendedCampaignStats struct {
 	// Number of remaning emails to send
 	Remaining int64 `json:"remaining"`
 	// Statistics about the number of clicks for the links
-	LinksStats    *interface{}      `json:"linksStats"`
-	StatsByDomain *GetStatsByDomain `json:"statsByDomain"`
+	LinksStats    map[string]interface{} `json:"linksStats"`
+	StatsByDomain *GetStatsByDomain      `json:"statsByDomain"`
 	// Statistics about the campaign on the basis of various devices
 	StatsByDevice *GetStatsByDevice `json:"statsByDevice"`
 	// Statistics about the campaign on the basis of various browsers

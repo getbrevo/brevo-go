@@ -14,7 +14,7 @@ type CreateDoiContact struct {
 	// Email address where the confirmation email will be sent. This email address will be the identifier for all other contact attributes.
 	Email string `json:"email"`
 	// Pass the set of attributes and their values. These attributes must be present in your Brevo account. For eg. {'FNAME':'Elly', 'LNAME':'Roger'}
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	// Lists under user account where contact should be added
 	IncludeListIds []int64 `json:"includeListIds"`
 	// Lists under user account where contact should not be added

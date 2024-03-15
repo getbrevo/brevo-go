@@ -15,7 +15,7 @@ type Company struct {
 	// Unique company id
 	Id string `json:"id,omitempty"`
 	// Company attributes with values
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	// Contact ids for contacts linked to this company
 	LinkedContactsIds []int32 `json:"linkedContactsIds,omitempty"`
 	// Deals ids for companies linked to this company

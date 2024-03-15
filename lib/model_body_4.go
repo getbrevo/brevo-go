@@ -14,5 +14,5 @@ type Body4 struct {
 	// Name of deal
 	Name string `json:"name,omitempty"`
 	// Attributes for deal update
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 }

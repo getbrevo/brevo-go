@@ -14,5 +14,5 @@ type Body3 struct {
 	// Name of deal
 	Name string `json:"name"`
 	// Attributes fo\\r deal creation
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 }

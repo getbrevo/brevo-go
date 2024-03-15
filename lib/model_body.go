@@ -14,7 +14,7 @@ type Body struct {
 	// Name of company
 	Name string `json:"name"`
 	// Attributes for company creation
-	Attributes *interface{} `json:"attributes,omitempty"`
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	// Country code if phone_number is passed in attributes.
 	CountryCode int64 `json:"countryCode,omitempty"`
 }
