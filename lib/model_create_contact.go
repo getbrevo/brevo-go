@@ -18,9 +18,9 @@ type CreateContact struct {
 	// Pass the set of attributes and their values. The attribute's parameter should be passed in capital letter while creating a contact. These attributes must be present in your Brevo account. For eg. {\"FNAME\":\"Elly\", \"LNAME\":\"Roger\"}
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
 	// Set this field to blacklist the contact for emails (emailBlacklisted = true)
-	EmailBlacklisted bool `json:"emailBlacklisted,omitempty"`
+	EmailBlacklisted bool `json:"emailBlacklisted"`
 	// Set this field to blacklist the contact for SMS (smsBlacklisted = true)
-	SmsBlacklisted bool `json:"smsBlacklisted,omitempty"`
+	SmsBlacklisted bool `json:"smsBlacklisted"`
 	// Ids of the lists to add the contact to
 	ListIds []int64 `json:"listIds,omitempty"`
 	// Facilitate to update the existing contact in the same request (updateEnabled = true)
