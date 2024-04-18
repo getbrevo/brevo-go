@@ -283,6 +283,7 @@ ContactsApiService Create a contact
 @return CreateUpdateContactModel
 */
 func (a *ContactsApiService) CreateContact(ctx context.Context, createContact CreateContact) (CreateUpdateContactModel, *http.Response, error) {
+
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
