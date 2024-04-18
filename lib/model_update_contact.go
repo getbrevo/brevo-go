@@ -16,9 +16,9 @@ type UpdateContact struct {
 	// Pass your own Id to update ext_id of a contact.
 	ExtId string `json:"ext_id,omitempty"`
 	// Set/unset this field to blacklist/allow the contact for emails (emailBlacklisted = true)
-	EmailBlacklisted bool `json:"emailBlacklisted,omitempty"`
+	EmailBlacklisted bool `json:"emailBlacklisted"`
 	// Set/unset this field to blacklist/allow the contact for SMS (smsBlacklisted = true)
-	SmsBlacklisted bool `json:"smsBlacklisted,omitempty"`
+	SmsBlacklisted bool `json:"smsBlacklisted"`
 	// Ids of the lists to add the contact to
 	ListIds []int64 `json:"listIds,omitempty"`
 	// Ids of the lists to remove the contact from

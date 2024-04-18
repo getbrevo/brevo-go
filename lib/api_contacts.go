@@ -283,6 +283,9 @@ ContactsApiService Create a contact
 @return CreateUpdateContactModel
 */
 func (a *ContactsApiService) CreateContact(ctx context.Context, createContact CreateContact) (CreateUpdateContactModel, *http.Response, error) {
+	fmt.Println("====111====")
+	fmt.Printf("%+v", createContact)
+
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
