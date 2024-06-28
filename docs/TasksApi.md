@@ -31,7 +31,7 @@ Name | Type | Description  | Notes
  **filterType** | **optional.String**| Filter by task type (ID) | 
  **filterStatus** | **optional.String**| Filter by task status | 
  **filterDate** | **optional.String**| Filter by date | 
- **filterAssignTo** | **optional.String**| Filter by assignTo id | 
+ **filterAssignTo** | **optional.String**| Filter by the \&quot;assignTo\&quot; ID. You can utilize account emails for the \&quot;assignTo\&quot; attribute. | 
  **filterContacts** | **optional.String**| Filter by contact ids | 
  **filterDeals** | **optional.String**| Filter by deals ids | 
  **filterCompanies** | **optional.String**| Filter by companies ids | 
@@ -119,7 +119,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **id** | **string**|  | 
-  **body** | [**Body7**](Body7.md)| Updated task details. | 
+  **body** | [**Body12**](Body12.md)| Updated task details. | 
 
 ### Return type
 
@@ -137,7 +137,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **CrmTasksPost**
-> InlineResponse2011 CrmTasksPost(ctx, body)
+> InlineResponse2012 CrmTasksPost(ctx, body)
 Create a task
 
 ### Required Parameters
@@ -145,11 +145,11 @@ Create a task
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Body6**](Body6.md)| Task name. | 
+  **body** | [**Body11**](Body11.md)| Task name. | 
 
 ### Return type
 
-[**InlineResponse2011**](inlineResponse2011.md)
+[**InlineResponse2012**](inline_response_201_2.md)
 
 ### Authorization
 

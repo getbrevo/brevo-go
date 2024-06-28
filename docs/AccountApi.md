@@ -17,7 +17,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetAccount**](GetAccount.md)
+[**GetAccount**](getAccount.md)
 
 ### Authorization
 
@@ -53,7 +53,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAccountActivity**](GetAccountActivity.md)
+[**GetAccountActivity**](getAccountActivity.md)
 
 ### Authorization
 

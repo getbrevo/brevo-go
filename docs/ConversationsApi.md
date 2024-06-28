@@ -26,7 +26,7 @@ We recommend pinging this endpoint every minute for as long as the agent has to 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Body12**](Body12.md)| Agent fields. | 
+  **body** | [**Body17**](Body17.md)| Agent fields. | 
 
 ### Return type
 
@@ -117,7 +117,7 @@ Optional parameters are passed through a pointer to a ConversationsMessagesIdPut
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**optional.Interface of Body9**](Body9.md)|  | 
+ **body** | [**optional.Interface of Body14**](Body14.md)|  | 
 
 ### Return type
 
@@ -143,7 +143,7 @@ Send a message as an agent
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Body8**](Body8.md)| Message fields. | 
+  **body** | [**Body13**](Body13.md)| Message fields. | 
 
 ### Return type
 
@@ -222,7 +222,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **id** | **string**| ID of the message | 
-  **body** | [**Body11**](Body11.md)|  | 
+  **body** | [**Body16**](Body16.md)|  | 
 
 ### Return type
 
@@ -250,7 +250,7 @@ Example of automated messages: order status, announce new features in your web a
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Body10**](Body10.md)|  | 
+  **body** | [**Body15**](Body15.md)|  | 
 
 ### Return type
 

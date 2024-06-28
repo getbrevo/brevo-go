@@ -36,7 +36,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RemainingCreditModel**](RemainingCreditModel.md)
+[**RemainingCreditModel**](remainingCreditModel.md)
 
 ### Authorization
 
@@ -123,7 +123,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateReseller**](CreateReseller.md)
+[**CreateReseller**](createReseller.md)
 
 ### Authorization
 
@@ -229,7 +229,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetChildAccountCreationStatus**](GetChildAccountCreationStatus.md)
+[**GetChildAccountCreationStatus**](getChildAccountCreationStatus.md)
 
 ### Authorization
 
@@ -255,7 +255,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetChildDomains**](GetChildDomains.md)
+[**GetChildDomains**](getChildDomains.md)
 
 ### Authorization
 
@@ -281,7 +281,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetChildInfo**](GetChildInfo.md)
+[**GetChildInfo**](getChildInfo.md)
 
 ### Authorization
 
@@ -315,7 +315,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetChildrenList**](GetChildrenList.md)
+[**GetChildrenList**](getChildrenList.md)
 
 ### Authorization
 
@@ -343,7 +343,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSsoToken**](GetSsoToken.md)
+[**GetSsoToken**](getSsoToken.md)
 
 ### Authorization
 
@@ -370,7 +370,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RemainingCreditModel**](RemainingCreditModel.md)
+[**RemainingCreditModel**](remainingCreditModel.md)
 
 ### Authorization
 

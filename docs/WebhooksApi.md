@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateWebhook**](WebhooksApi.md#CreateWebhook) | **Post** /webhooks | Create a webhook
 [**DeleteWebhook**](WebhooksApi.md#DeleteWebhook) | **Delete** /webhooks/{webhookId} | Delete a webhook
-[**ExportWebhooksHistory**](WebhooksApi.md#ExportWebhooksHistory) | **Post** /webhooks/export | Export all transactional events
+[**ExportWebhooksHistory**](WebhooksApi.md#ExportWebhooksHistory) | **Post** /webhooks/export | Export all webhook events
 [**GetWebhook**](WebhooksApi.md#GetWebhook) | **Get** /webhooks/{webhookId} | Get a webhook details
 [**GetWebhooks**](WebhooksApi.md#GetWebhooks) | **Get** /webhooks | Get all webhooks
 [**UpdateWebhook**](WebhooksApi.md#UpdateWebhook) | **Put** /webhooks/{webhookId} | Update a webhook
@@ -25,7 +25,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](CreateModel.md)
+[**CreateModel**](createModel.md)
 
 ### Authorization
 
@@ -66,9 +66,9 @@ Name | Type | Description  | Notes
 
 # **ExportWebhooksHistory**
 > CreatedProcessId ExportWebhooksHistory(ctx, exportWebhookHistory)
-Export all transactional events
+Export all webhook events
 
-This endpoint will submit a request to get the history of webhooks in the CSV file. The link to download that CSV file will send to the webhook link provided in notifyURL of the body payload.
+This endpoint will submit a request to get the history of webhooks in the CSV file. The link to download the CSV file will be sent to the webhook that was provided in the notifyURL.
 
 ### Required Parameters
 
@@ -79,7 +79,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](CreatedProcessId.md)
+[**CreatedProcessId**](createdProcessId.md)
 
 ### Authorization
 
@@ -105,7 +105,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetWebhook**](GetWebhook.md)
+[**GetWebhook**](getWebhook.md)
 
 ### Authorization
 
@@ -139,7 +139,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetWebhooks**](GetWebhooks.md)
+[**GetWebhooks**](getWebhooks.md)
 
 ### Authorization
 

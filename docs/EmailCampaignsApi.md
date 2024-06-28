@@ -32,7 +32,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](CreateModel.md)
+[**CreateModel**](createModel.md)
 
 ### Authorization
 
@@ -93,7 +93,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](CreatedProcessId.md)
+[**CreatedProcessId**](createdProcessId.md)
 
 ### Authorization
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AbTestCampaignResult**](AbTestCampaignResult.md)
+[**AbTestCampaignResult**](abTestCampaignResult.md)
 
 ### Authorization
 
@@ -156,7 +156,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetEmailCampaign**](GetEmailCampaign.md)
+[**GetEmailCampaign**](getEmailCampaign.md)
 
 ### Authorization
 
@@ -187,7 +187,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **type_** | **optional.String**| Filter on the type of the campaigns | 
  **status** | **optional.String**| Filter on the status of the campaign | 
- **statistics** | **optional.String**| Filter on the type of statistics required. Example **globalStats** value will only fetch globalStats info of the campaign in returned response. | 
+ **statistics** | **optional.String**| Filter on the type of statistics required. Example **globalStats** value will only fetch globalStats info of the campaign in returned response.This option only returns data for events occurred in the last 6 months.For older campaigns, it’s advisable to use the **Get Campaign Report** endpoint. | 
  **startDate** | **optional.String**| Mandatory if endDate is used. Starting (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to filter the sent email campaigns. Prefer to pass your timezone in date-time format for accurate result ( only available if either &#39;status&#39; not passed and if passed is set to &#39;sent&#39; ) | 
  **endDate** | **optional.String**| Mandatory if startDate is used. Ending (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to filter the sent email campaigns. Prefer to pass your timezone in date-time format for accurate result ( only available if either &#39;status&#39; not passed and if passed is set to &#39;sent&#39; ) | 
  **limit** | **optional.Int64**| Number of documents per page | [default to 50]
@@ -197,7 +197,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetEmailCampaigns**](GetEmailCampaigns.md)
+[**GetEmailCampaigns**](getEmailCampaigns.md)
 
 ### Authorization
 
@@ -225,7 +225,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSharedTemplateUrl**](GetSharedTemplateUrl.md)
+[**GetSharedTemplateUrl**](getSharedTemplateUrl.md)
 
 ### Authorization
 
@@ -387,7 +387,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UploadImageModel**](UploadImageModel.md)
+[**UploadImageModel**](uploadImageModel.md)
 
 ### Authorization
 

@@ -37,7 +37,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetWhatsappEventReport**](GetWhatsappEventReport.md)
+[**GetWhatsappEventReport**](getWhatsappEventReport.md)
 
 ### Authorization
 
@@ -51,7 +51,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **SendWhatsappMessage**
-> InlineResponse2012 SendWhatsappMessage(ctx, sendWhatsappMessage)
+> InlineResponse2014 SendWhatsappMessage(ctx, sendWhatsappMessage)
 Send a WhatsApp message
 
 This endpoint is used to send a WhatsApp message. <br/>(**The first message you send using the API must contain a Template ID. You must create a template on WhatsApp on the Brevo platform to fetch the Template ID.**)
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2012**](InlineResponse2012.md)
+[**InlineResponse2014**](inline_response_201_4.md)
 
 ### Authorization
 

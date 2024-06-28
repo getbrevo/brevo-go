@@ -10,6 +10,9 @@ Name | Type | Description | Notes
 **Type_** | **string** | Type of webhook (marketing or transactional) | [default to null]
 **CreatedAt** | **string** | Creation UTC date-time of the webhook (YYYY-MM-DDTHH:mm:ss.SSSZ) | [default to null]
 **ModifiedAt** | **string** | Last modification UTC date-time of the webhook (YYYY-MM-DDTHH:mm:ss.SSSZ) | [default to null]
+**Batched** | **bool** | To send batched webhooks | [optional] [default to null]
+**Auth** | [***GetWebhookAuth**](getWebhook_auth.md) |  | [optional] [default to null]
+**Headers** | [**[]GetWebhookHeaders**](getWebhook_headers.md) | Custom headers to be send with webhooks | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

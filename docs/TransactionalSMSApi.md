@@ -38,7 +38,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSmsEventReport**](GetSmsEventReport.md)
+[**GetSmsEventReport**](getSmsEventReport.md)
 
 ### Authorization
 
@@ -74,7 +74,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetTransacAggregatedSmsReport**](GetTransacAggregatedSmsReport.md)
+[**GetTransacAggregatedSmsReport**](getTransacAggregatedSmsReport.md)
 
 ### Authorization
 
@@ -111,7 +111,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetTransacSmsReport**](GetTransacSmsReport.md)
+[**GetTransacSmsReport**](getTransacSmsReport.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SendSms**](SendSms.md)
+[**SendSms**](sendSms.md)
 
 ### Authorization
 

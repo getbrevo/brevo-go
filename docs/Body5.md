@@ -3,10 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**LinkContactIds** | **[]int64** | Contact ids for contacts to be linked with deal | [optional] [default to null]
-**UnlinkContactIds** | **[]int64** | Contact ids for contacts to be unlinked from deal | [optional] [default to null]
-**LinkCompanyIds** | **[]string** | Company ids to be linked with deal | [optional] [default to null]
-**UnlinkCompanyIds** | **[]string** | Company ids to be unlinked from deal | [optional] [default to null]
+**Name** | **string** | Name of company | [default to null]
+**Attributes** | [**map[string]interface{}**](interface{}.md) | Attributes for company creation | [optional] [default to null]
+**CountryCode** | **int64** | Country code if phone_number is passed in attributes. | [optional] [default to null]
+**LinkedContactsIds** | **[]int64** | Contact ids to be linked with company | [optional] [default to null]
+**LinkedDealsIds** | **[]string** | Deal ids to be linked with company | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

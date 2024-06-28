@@ -24,7 +24,7 @@ Method | HTTP request | Description
 [**SendTestTemplate**](TransactionalEmailsApi.md#SendTestTemplate) | **Post** /smtp/templates/{templateId}/sendTest | Send a template to your test list
 [**SendTransacEmail**](TransactionalEmailsApi.md#SendTransacEmail) | **Post** /smtp/email | Send a transactional email
 [**SmtpBlockedContactsEmailDelete**](TransactionalEmailsApi.md#SmtpBlockedContactsEmailDelete) | **Delete** /smtp/blockedContacts/{email} | Unblock or resubscribe a transactional contact
-[**SmtpLogMessageIdDelete**](TransactionalEmailsApi.md#SmtpLogMessageIdDelete) | **Delete** /smtp/log/{messageId} | Delete an SMTP transactional log
+[**SmtpLogIdentifierDelete**](TransactionalEmailsApi.md#SmtpLogIdentifierDelete) | **Delete** /smtp/log/{identifier} | Delete an SMTP transactional log
 [**UpdateSmtpTemplate**](TransactionalEmailsApi.md#UpdateSmtpTemplate) | **Put** /smtp/templates/{templateId} | Update an email template
 
 
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](CreateModel.md)
+[**CreateModel**](createModel.md)
 
 ### Authorization
 
@@ -224,7 +224,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAggregatedReport**](GetAggregatedReport.md)
+[**GetAggregatedReport**](getAggregatedReport.md)
 
 ### Authorization
 
@@ -248,7 +248,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetBlockedDomains**](GetBlockedDomains.md)
+[**GetBlockedDomains**](getBlockedDomains.md)
 
 ### Authorization
 
@@ -293,7 +293,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetEmailEventReport**](GetEmailEventReport.md)
+[**GetEmailEventReport**](getEmailEventReport.md)
 
 ### Authorization
 
@@ -373,7 +373,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetScheduledEmailByMessageId**](GetScheduledEmailByMessageId.md)
+[**GetScheduledEmailByMessageId**](getScheduledEmailByMessageId.md)
 
 ### Authorization
 
@@ -412,7 +412,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetReports**](GetReports.md)
+[**GetReports**](getReports.md)
 
 ### Authorization
 
@@ -438,7 +438,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSmtpTemplateOverview**](GetSmtpTemplateOverview.md)
+[**GetSmtpTemplateOverview**](getSmtpTemplateOverview.md)
 
 ### Authorization
 
@@ -474,7 +474,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSmtpTemplates**](GetSmtpTemplates.md)
+[**GetSmtpTemplates**](getSmtpTemplates.md)
 
 ### Authorization
 
@@ -512,7 +512,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetTransacBlockedContacts**](GetTransacBlockedContacts.md)
+[**GetTransacBlockedContacts**](getTransacBlockedContacts.md)
 
 ### Authorization
 
@@ -538,7 +538,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetTransacEmailContent**](GetTransacEmailContent.md)
+[**GetTransacEmailContent**](getTransacEmailContent.md)
 
 ### Authorization
 
@@ -580,7 +580,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetTransacEmailsList**](GetTransacEmailsList.md)
+[**GetTransacEmailsList**](getTransacEmailsList.md)
 
 ### Authorization
 
@@ -633,7 +633,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateSmtpEmail**](CreateSmtpEmail.md)
+[**CreateSmtpEmail**](createSmtpEmail.md)
 
 ### Authorization
 
@@ -672,8 +672,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **SmtpLogMessageIdDelete**
-> SmtpLogMessageIdDelete(ctx, messageId)
+# **SmtpLogIdentifierDelete**
+> SmtpLogIdentifierDelete(ctx, identifier)
 Delete an SMTP transactional log
 
 ### Required Parameters
@@ -681,7 +681,7 @@ Delete an SMTP transactional log
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **messageId** | **string**| MessageId of the transactional log to delete | 
+  **identifier** | **string**| MessageId or Email of the transactional log(s) to delete | 
 
 ### Return type
 

@@ -11,7 +11,8 @@ info:
     \  |\n  | 400  | Error. Bad Request  |\n  | 401  | Error. Authentication Needed\
     \  |\n  | 402  | Error. Not enough credit, plan upgrade needed  |\n  | 403  |\
     \ Error. Permission denied  |\n  | 404  | Error. Object does not exist |\n  |\
-    \ 405  | Error. Method not allowed  |\n  | 406  | Error. Not Acceptable  |\n"
+    \ 405  | Error. Method not allowed  |\n  | 406  | Error. Not Acceptable  |\n \
+    \ | 422  | Error. Unprocessable Entity |\n"
   version: "3.0.0"
   title: "Brevo API"
   contact:
@@ -67,7 +68,9 @@ paths:
       - name: "statistics"
         in: "query"
         description: "Filter on the type of statistics required. Example **globalStats**\
-          \ value will only fetch globalStats info of the campaign in returned response."
+          \ value will only fetch globalStats info of the campaign in returned response.This\
+          \ option only returns data for events occurred in the last 6 months.For\
+          \ older campaigns, it’s advisable to use the **Get Campaign Report** endpoint."
         required: false
         type: "string"
         enum:
@@ -149,6 +152,7 @@ paths:
               - id: 12
                 name: "EN - Sales Summer 2017"
                 subject: "20% OFF for 2017 Summer Sales"
+                previewText: "Don't miss the sale!"
                 type: "classic"
                 status: "sent"
                 scheduledAt: "2017-06-01T12:30:00Z"
@@ -235,6 +239,7 @@ paths:
               - id: 22
                 name: "Weekly - 1"
                 subject: "Week 1 - Newsletter"
+                previewText: "your weekly newsletter!"
                 type: "Classic"
                 status: "draft"
                 scheduledAt: ""
@@ -386,6 +391,7 @@ paths:
               id: 22
               name: "Weekly - 1"
               subject: "Week 1 - Newsletter"
+              previewText: "your weekly newsletter!"
               type: "classic"
               status: "draft"
               scheduledAt: "2017-09-22T12:30:00Z"
@@ -1020,18 +1026,18 @@ paths:
                 \ <p>This is the actual html content sent</p> </body> </html>"
           schema:
             $ref: "#/definitions/getTransacEmailContent"
-  /smtp/log/{messageId}:
+  /smtp/log/{identifier}:
     delete:
       tags:
       - "Transactional emails"
       summary: "Delete an SMTP transactional log"
       parameters:
-      - name: "messageId"
+      - name: "identifier"
         in: "path"
-        description: "MessageId of the transactional log to delete"
+        description: "MessageId or Email of the transactional log(s) to delete"
         required: true
         type: "string"
-        x-exportParamName: "MessageId"
+        x-exportParamName: "Identifier"
       responses:
         "204":
           description: "Transactional Logs deleted"
@@ -2040,6 +2046,32 @@ paths:
         - "desc"
         x-exportParamName: "Sort"
         x-optionalDataType: "String"
+      - name: "segmentId"
+        in: "query"
+        description: "Id of the segment. **Either listIds or segmentId can be passed.**"
+        required: false
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "SegmentId"
+        x-optionalDataType: "Int64"
+      - name: "listIds"
+        in: "query"
+        description: "Ids of the list. **Either listIds or segmentId can be passed.**"
+        required: false
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+        x-exportParamName: "ListIds"
+      - name: "filter"
+        in: "query"
+        description: "Filter the contacts on the basis of attributes. **Allowed operator:\
+          \ equals. (e.g. filter=equals(FIRSTNAME,\"Antoine\"), filter=equals(B1,\
+          \ true), filter=equals(DOB, \"1989-11-23\"))**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "Filter"
+        x-optionalDataType: "String"
       responses:
         "200":
           description: "All contacts listed"
@@ -2353,10 +2385,6 @@ paths:
           description: "Contact campaign statistics informations"
           examples:
             application/json:
-              from: "sendermail@example.com"
-              tags:
-              - "tag1"
-              - "tag2"
               messagesSent:
               - campaignId: 21
                 eventTime: "2016-05-03T20:15:13Z"
@@ -2481,6 +2509,7 @@ paths:
         - "category"
         - "calculated"
         - "global"
+        - "normal"
         x-exportParamName: "AttributeCategory"
       - name: "attributeName"
         in: "path"
@@ -2948,6 +2977,26 @@ paths:
         type: "integer"
         format: "int64"
         x-exportParamName: "ListId"
+      - name: "startDate"
+        in: "query"
+        description: "Mandatory if endDate is used. Ending (urlencoded) UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a\
+          \ specific list id.Prefer to pass your timezone in date-time format for\
+          \ accurate result"
+        required: false
+        type: "string"
+        x-exportParamName: "StartDate"
+        x-optionalDataType: "String"
+      - name: "endDate"
+        in: "query"
+        description: "Mandatory if startDate is used. Ending (urlencoded) UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a\
+          \ specific list id.Prefer to pass your timezone in date-time format for\
+          \ accurate result"
+        required: false
+        type: "string"
+        x-exportParamName: "EndDate"
+        x-optionalDataType: "String"
       responses:
         "200":
           description: "List informations"
@@ -2955,6 +3004,8 @@ paths:
             application/json:
               id: 12
               name: "Newsletter_Weekly"
+              startDate: "2023-10-0T00:00:00Z"
+              endDate: "2023-04-0T00:00:00Z"
               totalSubscribers: 6533
               totalBlacklisted: 63
               uniqueSubscribers: 6596
@@ -3278,7 +3329,8 @@ paths:
       - "Contacts"
       summary: "Import contacts"
       description: "It returns the background process ID which on completion calls\
-        \ the notify URL that you have set in the input."
+        \ the notify URL that you have set in the input.\n\n**Note**:\n- Any contact\
+        \ attribute that doesn't exist in your account will be ignored at import end.\n"
       operationId: "importContacts"
       parameters:
       - in: "body"
@@ -3806,6 +3858,7 @@ paths:
               replied: 8
               accepted: 6
               rejected: 14
+              skipped: 3
           schema:
             $ref: "#/definitions/getTransacAggregatedSmsReport"
         "400":
@@ -3879,6 +3932,7 @@ paths:
                 replied: 5091
                 accepted: 2318
                 rejected: 0
+                skipped: 1
               - date: "2017-05-01"
                 requests: 18812
                 delivered: 17499
@@ -3889,6 +3943,7 @@ paths:
                 replied: 10089
                 accepted: 4393
                 rejected: 0
+                skipped: 0
               - date: "2017-05-02"
                 requests: 14321
                 delivered: 13427
@@ -3899,6 +3954,7 @@ paths:
                 replied: 11563
                 accepted: 4689
                 rejected: 0
+                skipped: 1
           schema:
             $ref: "#/definitions/getTransacSmsReport"
         "400":
@@ -3979,6 +4035,7 @@ paths:
         - "replies"
         - "blocked"
         - "rejected"
+        - "skipped"
         x-exportParamName: "Event"
         x-optionalDataType: "String"
       - name: "tags"
@@ -4100,6 +4157,37 @@ paths:
           description: "Campaign Id not found"
           schema:
             $ref: "#/definitions/errorModel"
+    put:
+      tags:
+      - "WhatsApp Campaigns"
+      summary: "Update a WhatsApp campaign"
+      operationId: "updateWhatsAppCampaign"
+      parameters:
+      - name: "campaignId"
+        in: "path"
+        description: "Id of the campaign"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "CampaignId"
+      - in: "body"
+        name: "whatsAppCampaign"
+        description: "values to update WhatsApp Campaign"
+        required: false
+        schema:
+          $ref: "#/definitions/updateWhatsAppCampaign"
+        x-exportParamName: "WhatsAppCampaign"
+      responses:
+        "204":
+          description: "WhatsApp Campaign has been updated"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Campaign id not found"
+          schema:
+            $ref: "#/definitions/errorModel"
     delete:
       tags:
       - "WhatsApp Campaigns"
@@ -4135,8 +4223,7 @@ paths:
         in: "query"
         description: "**Mandatory if endDate is used**. Starting (urlencoded) UTC\
           \ date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to filter the templates created.\n\
-          **Prefer to pass your timezone in date-time format for accurate result**\
-          \ \n"
+          **Prefer to pass your timezone in date-time format for accurate result**\n"
         required: false
         type: "string"
         x-exportParamName: "StartDate"
@@ -4145,8 +4232,7 @@ paths:
         in: "query"
         description: "**Mandatory if startDate is used**. Ending (urlencoded) UTC\
           \ date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to filter the templates created.\n\
-          **Prefer to pass your timezone in date-time format for accurate result**\
-          \ \n"
+          **Prefer to pass your timezone in date-time format for accurate result**\n"
         required: false
         type: "string"
         x-exportParamName: "EndDate"
@@ -4182,6 +4268,16 @@ paths:
         - "asc"
         - "desc"
         x-exportParamName: "Sort"
+        x-optionalDataType: "String"
+      - name: "source"
+        in: "query"
+        description: "source of the template"
+        required: false
+        type: "string"
+        enum:
+        - "Automation"
+        - "Conversations"
+        x-exportParamName: "Source"
         x-optionalDataType: "String"
       responses:
         "200":
@@ -4348,6 +4444,27 @@ paths:
           description: "WhatsApp campaign created"
           schema:
             $ref: "#/definitions/createModel"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /whatsappCampaigns/template/approval/{templateId}:
+    post:
+      tags:
+      - "WhatsApp Campaigns"
+      summary: "Send your WhatsApp template for approval"
+      operationId: "sendWhatsAppTemplateApproval"
+      parameters:
+      - name: "templateId"
+        in: "path"
+        description: "id of the campaign"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "TemplateId"
+      responses:
+        "200":
+          description: "WhatsApp template sent for approval"
         "400":
           description: "bad request"
           schema:
@@ -4659,7 +4776,7 @@ paths:
       tags:
       - "Domains"
       summary: "Validate domain configuration"
-      operationId: "getDomainonfiguration"
+      operationId: "getDomainConfiguration"
       parameters:
       - name: "domainName"
         in: "path"
@@ -4671,7 +4788,7 @@ paths:
         "200":
           description: "domain configuration"
           schema:
-            $ref: "#/definitions/getDomainonfigurationModel"
+            $ref: "#/definitions/getDomainConfigurationModel"
         "400":
           description: "bad request"
           schema:
@@ -4908,10 +5025,10 @@ paths:
     post:
       tags:
       - "Webhooks"
-      summary: "Export all transactional events"
+      summary: "Export all webhook events"
       description: "This endpoint will submit a request to get the history of webhooks\
-        \ in the CSV file. The link to download that CSV file will send to the webhook\
-        \ link provided in notifyURL of the body payload."
+        \ in the CSV file. The link to download the CSV file will be sent to the webhook\
+        \ that was provided in the notifyURL."
       operationId: "exportWebhooksHistory"
       parameters:
       - in: "body"
@@ -5610,6 +5727,7 @@ paths:
     get:
       tags:
       - "Account"
+      - "Master account"
       summary: "Get user activity logs"
       operationId: "getAccountActivity"
       parameters:
@@ -5673,6 +5791,308 @@ paths:
             $ref: "#/definitions/getAccountActivity"
         "400":
           description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/invited/users:
+    get:
+      tags:
+      - "User"
+      summary: "Get the list of all your users"
+      operationId: "getInvitedUsersList"
+      parameters: []
+      responses:
+        "200":
+          description: "list of all your users"
+          examples:
+            application/json:
+              users:
+              - email: "owner@company.com"
+                is_owner: true
+                status: "active"
+                feature_access:
+                  marketing: "owner"
+                  conversations: "owner"
+                  crm: "owner"
+              - email: "pendingInvitedUser@company.com"
+                is_owner: false
+                status: "pending"
+                feature_access:
+                  marketing: "custom"
+                  conversations: "none"
+                  crm: "full"
+              - email: "connectedInvitedUser@company.com"
+                is_owner: false
+                status: "active"
+                feature_access:
+                  marketing: "none"
+                  conversations: "full"
+                  crm: "none"
+          schema:
+            $ref: "#/definitions/getInvitedUsersList"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/user/{email}/permissions:
+    get:
+      tags:
+      - "User"
+      summary: "Check user permission"
+      operationId: "getUserPermission"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the invited user."
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "200":
+          description: "list of all the user's permissions"
+          examples:
+            application/json:
+              email: "invitedUser@company.com"
+              status: "active"
+              privileges:
+              - feature: "Email campaign"
+                permissions:
+                - "Create / edit / delete"
+                - "Send / schedule / suspend"
+              - feature: "Templates"
+                permissions:
+                - "Create / edit / delete"
+                - "Activate / deactivate"
+              - feature: "SMS campaign"
+                permissions:
+                - "Create / edit / delete"
+                - "Send / schedule / suspend"
+              - feature: "Facebook Ads"
+                permissions:
+                - "Schedule / pause"
+              - feature: "Landing pages"
+                permissions:
+                - "All"
+              - feature: "Workflows"
+                permissions:
+                - "Create / edit / delete"
+                - "Activate / deactivate / Pause"
+              - feature: "Contacts"
+                permissions:
+                - "View"
+                - "Contact forms"
+              - feature: "SMTP & API"
+                permissions:
+                - "SMTP"
+                - "API Keys"
+                - "Authorized IPs"
+              - feature: "User management"
+                permissions:
+                - "None"
+              - feature: "Sales Platform"
+                permissions:
+                - "Create / edit / delete owned deals and tasks"
+                - "Manage deals and tasks from other users"
+                - "Reports"
+                - "Settings"
+              - feature: "Conversations"
+                permissions:
+                - "None"
+              - feature: "Senders, Domains & Dedicated IPs"
+                permissions:
+                - "Senders management"
+                - "Domains management"
+                - "Dedicated IPs management"
+              - feature: "Push"
+                permissions:
+                - "View"
+                - "Create / edit / delete"
+                - "Send"
+                - "Settings"
+              - feature: "Companies"
+                permissions:
+                - "Create / edit / delete owned companies"
+                - "Manage companies from other users"
+                - "Settings"
+          schema:
+            $ref: "#/definitions/getUserPermission"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/user/invitation/revoke/{email}:
+    put:
+      tags:
+      - "User"
+      summary: "Revoke user permission"
+      operationId: "putRevokeUserPermission"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the invited user."
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "200":
+          description: "Success"
+          examples:
+            application/json:
+              status: "OK"
+              credit_notes:
+              - "TEST-123"
+          schema:
+            $ref: "#/definitions/putRevokeUserPermission"
+        "403":
+          description: "Unauthorized access"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/user/invitation/{action}/{email}:
+    put:
+      tags:
+      - "User"
+      summary: "Resend / Cancel invitation"
+      operationId: "putresendcancelinvitation"
+      parameters:
+      - name: "action"
+        in: "path"
+        description: "action"
+        required: true
+        type: "string"
+        enum:
+        - "resend"
+        - "cancel"
+        x-exportParamName: "Action"
+      - name: "email"
+        in: "path"
+        description: "Email of the invited user."
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "200":
+          description: "Success"
+          examples:
+            application/json:
+              status: "OK"
+              credit_notes:
+              - "TEST-123"
+          schema:
+            $ref: "#/definitions/putresendcancelinvitation"
+        "403":
+          description: "Unauthorized access"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/user/invitation/send:
+    post:
+      tags:
+      - "User"
+      summary: "Send invitation to user"
+      description: "`Feature` - A Feature represents a specific functionality like\
+        \ Email campaign, Deals, Calls, Automations, etc. on Brevo. While inviting\
+        \ a user, determine which feature you want to manage access to. You must specify\
+        \ the feature accurately to avoid errors.\n\n`Permission` - A Permission defines\
+        \ the level of access or control a user has over a specific feature. While\
+        \ inviting user, decide on the permission level required for the selected\
+        \ feature. Make sure the chosen permission is related to the selected feature.\n\
+        \nFeatures and their respective permissions are as below:\n\n- `email_campaigns`:\n\
+        \  - \"create_edit_delete\"\n  - \"send_schedule_suspend\"\n- `sms_campaigns`:\n\
+        \  - \"create_edit_delete\"\n  - \"send_schedule_suspend\"\n- `contacts`:\n\
+        \  - \"view\"\n  - \"create_edit_delete\"\n  - \"import\"\n  - \"export\"\n\
+        \  - \"list_and_attributes\"\n  - \"forms\"\n- `templates`:\n  - \"create_edit_delete\"\
+        \n  - \"activate_deactivate\"\n- `workflows`:\n  - \"create_edit_delete\"\n\
+        \  - \"activate_deactivate_pause\"\n  - \"settings\"\n- `facebook_ads`:\n\
+        \  - \"create_edit_delete\"\n  - \"schedule_pause\"\n- `landing_pages`:\n\
+        \  - \"all\"\n- `transactional_emails`:\n  - \"settings\"\n  - \"logs\"\n\
+        - `smtp_api`:\n  - \"smtp\"\n  - \"api_keys\"\n  - \"authorized_ips\"\n- `user_management`:\n\
+        \  - \"all\"\n- `sales_platform`:\n  - \"manage_owned_deals_tasks\"\n  - \"\
+        manage_others_deals_tasks\"\n  - \"reports\"\n  - \"settings\"\n- `phone`:\n\
+        \  - \"all\"\n- `conversations`:\n  - \"access\"\n  - \"assign\"\n  - \"configure\"\
+        \n- `senders_domains_dedicated_ips`:\n  - \"senders_management\"\n  - \"domains_management\"\
+        \n  - \"dedicated_ips_management\"\n- `push_notifications`:\n  - \"view\"\n\
+        \  - \"create_edit_delete\"\n  - \"send\"\n  - \"settings\"\n- `companies`:\n\
+        \  - \"manage_owned_companies\"\n  - \"manage_other_companies\"\n  - \"settings\"\
+        \n\n**Note**:\n- If `all_features_access: false` then only privileges are\
+        \ required otherwise if `true` then it's assumed that all permissions will\
+        \ be there for the invited user.\n- The availability of feature and its permission\
+        \ depends on your current plan. Please select the features and permissions\
+        \ accordingly.\n"
+      operationId: "inviteuser"
+      parameters:
+      - in: "body"
+        name: "sendInvitation"
+        description: "Values to create an invitation"
+        required: true
+        schema:
+          $ref: "#/definitions/inviteuser"
+        x-exportParamName: "SendInvitation"
+      responses:
+        "200":
+          description: "Success"
+          examples:
+            application/json:
+              status: "OK"
+              invoice_id: "TEST-123"
+          schema:
+            $ref: "#/definitions/inviteuser"
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /organization/user/update/permissions:
+    post:
+      tags:
+      - "User"
+      summary: "Update permission for a user"
+      description: "`Feature` - A Feature represents a specific functionality like\
+        \ Email campaign, Deals, Calls, Automations, etc. on Brevo. While inviting\
+        \ a user, determine which feature you want to manage access to. You must specify\
+        \ the feature accurately to avoid errors.\n\n`Permission` - A Permission defines\
+        \ the level of access or control a user has over a specific feature. While\
+        \ inviting user, decide on the permission level required for the selected\
+        \ feature. Make sure the chosen permission is related to the selected feature.\n\
+        \nFeatures and their respective permissions are as below:\n\n- `email_campaigns`:\n\
+        \  - \"create_edit_delete\"\n  - \"send_schedule_suspend\"\n- `sms_campaigns`:\n\
+        \  - \"create_edit_delete\"\n  - \"send_schedule_suspend\"\n- `contacts`:\n\
+        \  - \"view\"\n  - \"create_edit_delete\"\n  - \"import\"\n  - \"export\"\n\
+        \  - \"list_and_attributes\"\n  - \"forms\"\n- `templates`:\n  - \"create_edit_delete\"\
+        \n  - \"activate_deactivate\"\n- `workflows`:\n  - \"create_edit_delete\"\n\
+        \  - \"activate_deactivate_pause\"\n  - \"settings\"\n- `facebook_ads`:\n\
+        \  - \"create_edit_delete\"\n  - \"schedule_pause\"\n- `landing_pages`:\n\
+        \  - \"all\"\n- `transactional_emails`:\n  - \"settings\"\n  - \"logs\"\n\
+        - `smtp_api`:\n  - \"smtp\"\n  - \"api_keys\"\n  - \"authorized_ips\"\n- `user_management`:\n\
+        \  - \"all\"\n- `sales_platform`:\n  - \"manage_owned_deals_tasks\"\n  - \"\
+        manage_others_deals_tasks\"\n  - \"reports\"\n  - \"settings\"\n- `phone`:\n\
+        \  - \"all\"\n- `conversations`:\n  - \"access\"\n  - \"assign\"\n  - \"configure\"\
+        \n- `senders_domains_dedicated_ips`:\n  - \"senders_management\"\n  - \"domains_management\"\
+        \n  - \"dedicated_ips_management\"\n- `push_notifications`:\n  - \"view\"\n\
+        \  - \"create_edit_delete\"\n  - \"send\"\n  - \"settings\"\n- `companies`:\n\
+        \  - \"manage_owned_companies\"\n  - \"manage_other_companies\"\n  - \"settings\"\
+        \n\n**Note**:\n- The privileges array remains the same as in the send invitation;\
+        \ the user simply needs to provide the permissions that need to be updated.\n\
+        - The availability of feature and its permission depends on your current plan.\
+        \ Please select the features and permissions accordingly.\n"
+      operationId: "EditUserPermission"
+      parameters:
+      - in: "body"
+        name: "updatePermissions"
+        description: "Values to update permissions for an invited user"
+        required: true
+        schema:
+          $ref: "#/definitions/inviteuser"
+        x-exportParamName: "UpdatePermissions"
+      responses:
+        "200":
+          description: "Success"
+          examples:
+            application/json:
+              status: "OK"
+              invoice_id: "TEST-123"
+              credit_notes:
+              - "TEST-123"
+          schema:
+            $ref: "#/definitions/inviteuser"
+        "403":
+          description: "Access Denied"
           schema:
             $ref: "#/definitions/errorModel"
   /processes:
@@ -5977,14 +6397,21 @@ paths:
                 companyName: "Company1"
                 active: true
                 createdAt: 1629439311
+                groups:
+                - id: "5f8f8c3b5f56a02d4433b3a8"
+                  name: "Group 1"
+                - id: "4fbf3c3b1f56a02ac465b1a0"
+                  name: "Group 2"
               - id: 3984002
                 companyName: "Company2"
                 active: true
                 createdAt: 1629439311
+                groups: []
               - id: 3524191
                 companyName: "Company3"
                 active: true
                 createdAt: 1614713641
+                groups: []
           schema:
             $ref: "#/definitions/subAccountsResponse"
         "400":
@@ -6043,10 +6470,20 @@ paths:
               name: "Uday Pandit"
               email: "uday+1@brevo.com"
               companyName: "API-Sub-26thOct21-4"
+              groups:
+              - id: "5f8f8c3b5f56a02d4433b3a7"
+                name: "Group 1"
+              - id: "5f8f8c3b5f56a02d4433b3a8"
+                name: "Group 2"
               planInfo:
                 credits:
-                  sms: 1234
                   emails:
+                    quantity: 2000
+                    remaining: 1955
+                  sms:
+                    quantity: 2000
+                    remaining: 1955
+                  wpSubscribers:
                     quantity: 2000
                     remaining: 1955
                 features:
@@ -6094,7 +6531,10 @@ paths:
       tags:
       - "Master account"
       summary: "Update sub-account plan"
-      description: "This endpoint will update the sub-account plan"
+      description: "This endpoint will update the sub-account plan. On the Corporate\
+        \ solution new version v2, you can set an unlimited number of credits in your\
+        \ sub-organization. Please pass the value “-1\" to set the consumable in unlimited\
+        \ mode."
       parameters:
       - name: "id"
         in: "path"
@@ -6125,11 +6565,51 @@ paths:
               message: "Access forbidden."
           schema:
             $ref: "#/definitions/errorModel"
+  /corporate/ssoToken:
+    post:
+      tags:
+      - "Master account"
+      summary: "Generate SSO token to access admin account"
+      description: "This endpoint generates an SSO token to authenticate and access\
+        \ the admin account using the endpoint https://account-app.brevo.com/account/login/corporate/sso/[token],\
+        \ where [token] will be replaced by the actual token."
+      parameters:
+      - in: "body"
+        name: "ssoTokenRequestCorporate"
+        description: "User email of admin account"
+        required: true
+        schema:
+          $ref: "#/definitions/ssoTokenRequestCorporate"
+        x-exportParamName: "SsoTokenRequestCorporate"
+      responses:
+        "200":
+          description: "Session token"
+          examples:
+            application/json:
+              token: "5cadaxxxxxxxxxxxxxxxxxxxx5a179f85a0"
+          schema:
+            $ref: "#/definitions/getSsoToken"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid email address"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Current account is not an admin account"
+          examples:
+            application/json:
+              code: "permission_denied"
+              message: "Access forbidden."
+          schema:
+            $ref: "#/definitions/errorModel"
   /corporate/subAccount/ssoToken:
     post:
       tags:
       - "Master account"
-      summary: "Generate SSO token to access Brevo"
+      summary: "Generate SSO token to access sub-account"
       description: "This endpoint generates an sso token to authenticate and access\
         \ a sub-account of the master using the account endpoint https://account-app.brevo.com/account/login/sub-account/sso/[token],\
         \ where [token] will be replaced by the actual token."
@@ -6263,6 +6743,468 @@ paths:
               message: "id should be a positive number"
           schema:
             $ref: "#/definitions/errorModel"
+  /corporate/subAccount/{id}/applications/toggle:
+    put:
+      tags:
+      - "Master account"
+      summary: "Enable/disable sub-account application(s)"
+      description: "API endpoint for the Corporate owner to enable/disable applications\
+        \ on the sub-account"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the sub-account organization (mandatory)"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "toggleApplications"
+        description: "List of applications to activate or deactivate on a sub-account"
+        required: true
+        schema:
+          $ref: "#/definitions/subAccountAppsToggleRequest"
+        x-exportParamName: "ToggleApplications"
+      responses:
+        "204":
+          description: "Sub-account application(s) enabled/disabled"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Current account is not a master account"
+          examples:
+            application/json:
+              code: "permission_denied"
+              message: "Access forbidden."
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/group:
+    post:
+      tags:
+      - "Master account"
+      summary: "Create a new group of sub-accounts"
+      description: "This endpoint allows to create a group of sub-accounts"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Group details to be created."
+        required: true
+        schema:
+          $ref: "#/definitions/body"
+        x-exportParamName: "Body"
+      responses:
+        "201":
+          description: "Group ID"
+          examples:
+            application/json:
+              id: "659xxxxxxxxxxxxxxxx6ef9c8"
+          schema:
+            $ref: "#/definitions/inline_response_201"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/subAccount/ip/associate:
+    post:
+      tags:
+      - "Master account"
+      summary: "Associate an IP to sub-accounts"
+      description: "This endpoint allows to associate an IP to sub-accounts"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Ip address association details"
+        required: true
+        schema:
+          $ref: "#/definitions/body_1"
+        x-exportParamName: "Body"
+      responses:
+        "201":
+          description: "IP has been associated with sub-accounts successfully"
+          examples:
+            application/json: []
+          schema:
+            type: "object"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "Invalid id."
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/subAccount/ip/dissociate:
+    put:
+      tags:
+      - "Master account"
+      summary: "Dissociate an IP from sub-accounts"
+      description: "This endpoint allows to dissociate an IP from sub-accounts"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Ip address dissociation details"
+        required: true
+        schema:
+          $ref: "#/definitions/body_2"
+        x-exportParamName: "Body"
+      responses:
+        "204":
+          description: "IP has been dissociated from sub-accounts successfully"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "Invalid id."
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/group/{id}:
+    get:
+      tags:
+      - "Master account"
+      summary: "GET a group details"
+      description: "This endpoint allows you to retrieve a specific group’s information\
+        \ such as the list of sub-organizations and the user associated with the group."
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the group of sub-organization"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "Group details"
+          examples:
+            application/json:
+              group:
+                id: "5f926dba72a405440a4efc97"
+                groupName: "My group"
+                createdAt: "2024-02-09T06:14:40+00:00"
+              sub-accounts:
+              - id: "7866556"
+                companyName: "My sub organization"
+                createdAt: "2024-02-09T06:14:40+00:00"
+              - id: "6563051"
+                companyName: "Your sub organization"
+                createdAt: "2024-01-05T03:11:40+00:00"
+              users:
+              - email: "my-user@my-org.com"
+                lastName: "Smith"
+                firstName: "John"
+              - email: "your-user@your-org.com"
+          schema:
+            $ref: "#/definitions/corporateGroupDetailsResponse"
+    put:
+      tags:
+      - "Master account"
+      summary: "Update a group of sub-accounts"
+      description: "This endpoint allows you to update a group of sub-accounts"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the group"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "body"
+        description: "Group details to be updated."
+        required: true
+        schema:
+          $ref: "#/definitions/body_3"
+        x-exportParamName: "Body"
+      responses:
+        "204":
+          description: "Group details updated"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+    delete:
+      tags:
+      - "Master account"
+      summary: "Delete a group"
+      description: "This endpoint allows you to delete a group of sub-organizations.\
+        \ When a group is deleted, the sub-organizations are no longer part of this\
+        \ group. The users associated with the group are no longer associated with\
+        \ the group once deleted."
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the group"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "204":
+          description: "Group deleted"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/group/unlink/{groupId}/subAccounts:
+    put:
+      tags:
+      - "Master account"
+      summary: "Delete sub-account from group"
+      description: "This endpoint allows you to remove a sub-organization from a group."
+      parameters:
+      - name: "groupId"
+        in: "path"
+        description: "Id of the group"
+        required: true
+        type: "string"
+        x-exportParamName: "GroupId"
+      - in: "body"
+        name: "body"
+        description: "List of sub-account ids"
+        required: true
+        schema:
+          $ref: "#/definitions/body_4"
+        x-exportParamName: "Body"
+      responses:
+        "204":
+          description: "SubAccounts removed from the group"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "subAccountIds should be array of numeric ids only"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/user/invitation/send:
+    post:
+      tags:
+      - "Master account"
+      summary: "Send invitation to an admin user"
+      description: "`This endpoint allows you to invite a member to manage the Admin\
+        \ account\n\nFeatures and their respective permissions are as below:\n\n-\
+        \ `my_plan`:\n  - \"all\"\n- `api`:\n  - \"none\"\n- `user_management`:\n\
+        \  - \"all\"\n- `app_management` | Not available in ENTv2:\n  - \"all\"\n\n\
+        **Note**:\n- If `all_features_access: false` then only privileges are required\
+        \ otherwise if `true` then it's assumed that all permissions will be there\
+        \ for the invited admin user.\n"
+      operationId: "inviteAdminUser"
+      parameters:
+      - in: "body"
+        name: "sendInvitation"
+        description: "Payload to send an invitation"
+        required: true
+        schema:
+          $ref: "#/definitions/inviteAdminUser"
+        x-exportParamName: "SendInvitation"
+      responses:
+        "200":
+          description: "Success"
+          examples:
+            application/json:
+              id: "2b4xxxxxxxxxxxxxxxxxxxxxda4"
+          schema:
+            $ref: "#/definitions/inviteAdminUser"
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/user/invitation/{action}/{email}:
+    put:
+      tags:
+      - "Master account"
+      summary: "Resend / cancel admin user invitation"
+      description: "This endpoint will allow the user to:\n- Resend an admin user\
+        \ invitation\n- Cancel an admin user invitation\n"
+      parameters:
+      - name: "action"
+        in: "path"
+        description: "Action to be performed (cancel / resend)"
+        required: true
+        type: "string"
+        x-exportParamName: "Action"
+      - name: "email"
+        in: "path"
+        description: "Email address of the recipient"
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "200":
+          description: "Response of the action performed"
+          examples:
+            application/json:
+              message: "Invitation resent successfully"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invitation not found"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/user/revoke/{email}:
+    delete:
+      tags:
+      - "Master account"
+      summary: "Revoke an admin user"
+      description: "This endpoint allows to revoke/remove an invited member of your\
+        \ Admin account"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the invited user"
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "204":
+          description: "User revoked"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/invited/users:
+    get:
+      tags:
+      - "Master account"
+      summary: "Get the list of all admin users"
+      description: "This endpoint allows you to list all Admin users of your Admin\
+        \ account"
+      operationId: "getCorporateInvitedUsersList"
+      parameters: []
+      responses:
+        "200":
+          description: "list of all admin users"
+          examples:
+            application/json:
+              users:
+              - groups:
+                - id: "65b1f22c09d6ed67ef1cd123"
+                  name: "Test Group1"
+                - id: "43b1f16c09db4d67af1cd342"
+                  name: "Test Group2"
+                email: "master-user2@company.com"
+                is_owner: false
+                status: "active"
+                feature_access:
+                  user_management:
+                  - "none"
+                  api_keys:
+                  - "none"
+                  my_plan:
+                  - "all"
+                  apps_management:
+                  - "all"
+              - groups: []
+                email: "master-user3@company.com"
+                is_owner: false
+                status: "active"
+                feature_access:
+                  user_management:
+                  - "all"
+                  api_keys:
+                  - "none"
+                  my_plan:
+                  - "all"
+                  apps_management:
+                  - "all"
+          schema:
+            $ref: "#/definitions/getCorporateInvitedUsersList"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/user/{email}/permissions:
+    get:
+      tags:
+      - "Master account"
+      summary: "Check admin user permissions"
+      operationId: "getCorporateUserPermission"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the invited user"
+        required: true
+        type: "string"
+        x-exportParamName: "Email"
+      responses:
+        "200":
+          description: "List of user's permissions"
+          examples:
+            application/json:
+              email: "test@email.com"
+              status: "active"
+              groups:
+              - id: "6543ab3667ffbb00142e4486"
+                name: "Support"
+              - id: "174bab366732bbce142e4412"
+                name: "Technical"
+              feature_access:
+                api_keys:
+                - "all"
+                my_plan:
+                - "all"
+                user_management:
+                - "none"
+                apps_management:
+                - "all"
+          schema:
+            $ref: "#/definitions/getCorporateUserPermission"
+        "400":
+          description: "bad request"
+          examples:
+            application/json:
+              code: "invalid_parameter"
+              message: "Invalid email address"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /corporate/groups:
+    get:
+      tags:
+      - "Master account"
+      summary: "Get the list of groups"
+      description: "This endpoint allows you to list all groups created on your Admin\
+        \ account."
+      operationId: "getSubAccountGroups"
+      parameters: []
+      responses:
+        "200":
+          description: "list of all the sub-account groups"
+          examples:
+            application/json:
+            - id: "d3b142c709d6ed67ef1cd903"
+              groupName: "My group 1"
+            - id: "a5b192a709d6ed67ef8fd922"
+              groupName: "My group 2"
+            - id: "bbb142c709d6ed67ef1cd910"
+              groupName: "My group 3"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/inline_response_200_1"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
   /companies:
     get:
       tags:
@@ -6351,13 +7293,13 @@ paths:
         description: "Company create data."
         required: true
         schema:
-          $ref: "#/definitions/body"
+          $ref: "#/definitions/body_5"
         x-exportParamName: "Body"
       responses:
         "200":
           description: "Created new company"
           schema:
-            $ref: "#/definitions/inline_response_200"
+            $ref: "#/definitions/inline_response_200_2"
         "400":
           description: "Returned when invalid data posted"
   /companies/{id}:
@@ -6432,7 +7374,7 @@ paths:
         description: "Updated company details."
         required: true
         schema:
-          $ref: "#/definitions/body_1"
+          $ref: "#/definitions/body_6"
         x-exportParamName: "Body"
       responses:
         "200":
@@ -6480,7 +7422,7 @@ paths:
         description: "Linked / Unlinked contacts and deals ids."
         required: true
         schema:
-          $ref: "#/definitions/body_2"
+          $ref: "#/definitions/body_7"
         x-exportParamName: "Body"
       responses:
         "204":
@@ -6498,12 +7440,56 @@ paths:
       tags:
       - "Deals"
       summary: "Get pipeline stages"
+      description: "This endpoint is deprecated. Prefer /crm/pipeline/details/{pipelineID}\
+        \ instead."
       parameters: []
       responses:
         "200":
           description: "Returns list of pipeline stages"
           schema:
             $ref: "#/definitions/Pipeline"
+      deprecated: true
+  /crm/pipeline/details/{pipelineID}:
+    get:
+      tags:
+      - "Deals"
+      summary: "Get a pipeline"
+      parameters:
+      - name: "pipelineID"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "PipelineID"
+      responses:
+        "200":
+          description: "Returns pipeline and its details"
+          schema:
+            $ref: "#/definitions/Pipelines"
+        "400":
+          description: "Returned when pipeline id is invalid or does not exist"
+          examples:
+            application/json:
+              message: "Pipeline not found"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /crm/pipeline/details/all:
+    get:
+      tags:
+      - "Deals"
+      summary: "Get all pipelines"
+      parameters: []
+      responses:
+        "200":
+          description: "Returns list of pipelines and its details"
+          schema:
+            $ref: "#/definitions/Pipelines"
+        "400":
+          description: "Returned when pipeline id is invalid or does not exist"
+          examples:
+            application/json:
+              message: "Pipeline not found"
+          schema:
+            $ref: "#/definitions/errorModel"
   /crm/attributes/deals:
     get:
       tags:
@@ -6521,13 +7507,14 @@ paths:
       - "Deals"
       summary: "Get all deals"
       parameters:
-      - name: "filters[attributes]"
+      - name: "filters[attributes.deal_name]"
         in: "query"
-        description: "Filter by attrbutes. If you have filter for owner on your side\
-          \ please send it as `attributes.owner`.\""
+        description: "Filter by attributes. If you have a filter for the owner on\
+          \ your end, please send it as filters[attributes.deal_owner] and utilize\
+          \ the account email for the filtering."
         required: false
         type: "string"
-        x-exportParamName: "FiltersAttributes"
+        x-exportParamName: "FiltersAttributesDealName"
         x-optionalDataType: "String"
       - name: "filters[linkedCompaniesIds]"
         in: "query"
@@ -6601,13 +7588,13 @@ paths:
         description: "Deal create data."
         required: true
         schema:
-          $ref: "#/definitions/body_3"
+          $ref: "#/definitions/body_8"
         x-exportParamName: "Body"
       responses:
         "201":
           description: "Created new Deal"
           schema:
-            $ref: "#/definitions/inline_response_201"
+            $ref: "#/definitions/inline_response_201_1"
         "400":
           description: "Returned when invalid data posted"
   /crm/deals/{id}:
@@ -6682,7 +7669,7 @@ paths:
         description: "Updated deal details."
         required: true
         schema:
-          $ref: "#/definitions/body_4"
+          $ref: "#/definitions/body_9"
         x-exportParamName: "Body"
       responses:
         "204":
@@ -6717,7 +7704,7 @@ paths:
         description: "Linked / Unlinked contacts and companies ids."
         required: true
         schema:
-          $ref: "#/definitions/body_5"
+          $ref: "#/definitions/body_10"
         x-exportParamName: "Body"
       responses:
         "204":
@@ -6731,6 +7718,47 @@ paths:
                 message: "Not valid data."
           schema:
             $ref: "#/definitions/errorModel"
+  /crm/deals/import:
+    post:
+      tags:
+      - "Deals"
+      summary: "Import deals(creation and updation)"
+      description: "Import deals from a CSV file with mapping options."
+      consumes:
+      - "multipart/form-data"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "The CSV file to upload.The file should have the first row as\
+          \ the mapping attribute. Some default attribute names are\n(a) deal_id [brevo\
+          \ mongoID to update deals]\n(b) associated_contact\n(c) associated_company\n\
+          (f) any other attribute with internal name\n"
+        required: true
+        type: "file"
+        format: "binary"
+        x-exportParamName: "File"
+      - name: "mapping"
+        in: "formData"
+        description: "The mapping options in JSON format.\n  json\n   {\n      \"\
+          link_entities\": true, // Determines whether to link related entities during\
+          \ the import process\n      \"unlink_entities\": false, //Determines whether\
+          \ to unlink related entities during the import process.\n      \"update_existing_records\"\
+          : true, // Determines whether to update based on deal ID or treat every\
+          \ row as create\n      \"unset_empty_attributes\": false // Determines whether\
+          \ unset a specific attribute during update if values input is blank\n  \
+          \  }\n"
+        required: true
+        type: "string"
+        x-exportParamName: "Mapping"
+      responses:
+        "200":
+          description: "Successfully imported deals"
+          schema:
+            $ref: "#/definitions/inline_response_200_3"
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/inline_response_400"
   /crm/tasktypes:
     get:
       tags:
@@ -6780,7 +7808,8 @@ paths:
         x-optionalDataType: "String"
       - name: "filter[assignTo]"
         in: "query"
-        description: "Filter by assignTo id"
+        description: "Filter by the \"assignTo\" ID. You can utilize account emails\
+          \ for the \"assignTo\" attribute."
         required: false
         type: "string"
         x-exportParamName: "FilterAssignTo"
@@ -6878,13 +7907,13 @@ paths:
         description: "Task name."
         required: true
         schema:
-          $ref: "#/definitions/body_6"
+          $ref: "#/definitions/body_11"
         x-exportParamName: "Body"
       responses:
         "201":
           description: "Created new task"
           schema:
-            $ref: "#/definitions/inline_response_201_1"
+            $ref: "#/definitions/inline_response_201_2"
         "400":
           description: "Returned when invalid data posted"
   /crm/tasks/{id}:
@@ -6959,7 +7988,7 @@ paths:
         description: "Updated task details."
         required: true
         schema:
-          $ref: "#/definitions/body_7"
+          $ref: "#/definitions/body_12"
         x-exportParamName: "Body"
       responses:
         "204":
@@ -7419,7 +8448,7 @@ paths:
         description: "Message fields."
         required: true
         schema:
-          $ref: "#/definitions/body_8"
+          $ref: "#/definitions/body_13"
         x-exportParamName: "Body"
       responses:
         "200":
@@ -7486,7 +8515,7 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/body_9"
+          $ref: "#/definitions/body_14"
         x-exportParamName: "Body"
       responses:
         "200":
@@ -7549,7 +8578,7 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/body_10"
+          $ref: "#/definitions/body_15"
         x-exportParamName: "Body"
       responses:
         "200":
@@ -7612,7 +8641,7 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/body_11"
+          $ref: "#/definitions/body_16"
         x-exportParamName: "Body"
       responses:
         "200":
@@ -7674,7 +8703,7 @@ paths:
         description: "Agent fields."
         required: true
         schema:
-          $ref: "#/definitions/body_12"
+          $ref: "#/definitions/body_17"
         x-exportParamName: "Body"
       responses:
         "201":
@@ -7700,6 +8729,265 @@ paths:
             $ref: "#/definitions/errorModel"
         "404":
           description: "api-key not found"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /ecommerce/config/displayCurrency:
+    get:
+      tags:
+      - "Ecommerce"
+      summary: "Get the ISO 4217 compliant display currency code for your Brevo account"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200_4"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Permission denied. eCommerce is not activated."
+          schema:
+            $ref: "#/definitions/errorModel"
+    post:
+      tags:
+      - "Ecommerce"
+      summary: "Set the ISO 4217 compliant display currency code for your Brevo account"
+      operationId: "setConfigDisplayCurrency"
+      parameters:
+      - in: "body"
+        name: "setConfigDisplayCurrency"
+        description: "set ISO 4217 compliant display currency code payload"
+        required: true
+        schema:
+          $ref: "#/definitions/setConfigDisplayCurrency"
+        x-exportParamName: "SetConfigDisplayCurrency"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/setConfigDisplayCurrency"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Permission denied. eCommerce is not activated."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "422":
+          description: "Invalid ISO 4217 currency code."
+          schema:
+            $ref: "#/definitions/errorModel"
+  /ecommerce/attribution/metrics:
+    get:
+      tags:
+      - "Ecommerce"
+      summary: "Get attribution metrics for one or more Brevo campaigns"
+      parameters:
+      - name: "periodFrom"
+        in: "query"
+        description: "When getting metrics for a specific period, define the starting\
+          \ datetime in RFC3339 format"
+        required: false
+        type: "string"
+        format: "date-time"
+        x-exportParamName: "PeriodFrom"
+        x-optionalDataType: "Time"
+      - name: "periodTo"
+        in: "query"
+        description: "When getting metrics for a specific period, define the end datetime\
+          \ in RFC3339 format"
+        required: false
+        type: "string"
+        format: "date-time"
+        x-exportParamName: "PeriodTo"
+        x-optionalDataType: "Time"
+      - name: "emailCampaignId[]"
+        in: "query"
+        description: "The email campaign id(s) to get metrics for"
+        required: false
+        type: "array"
+        items:
+          type: "number"
+          format: "integer"
+        x-exportParamName: "EmailCampaignId"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200_5"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /ecommerce/attribution/metrics/{conversionSource}/{conversionSourceId}:
+    get:
+      tags:
+      - "Ecommerce"
+      summary: "Get detailed attribution metrics for a single Brevo campaign"
+      parameters:
+      - name: "conversionSource"
+        in: "path"
+        description: "The Brevo campaign type for which data will be retrieved"
+        required: true
+        type: "string"
+        enum:
+        - "email_campaign"
+        x-exportParamName: "ConversionSource"
+      - name: "conversionSourceId"
+        in: "path"
+        description: "The Brevo campaign id for which data will be retrieved"
+        required: true
+        type: "number"
+        format: "integer"
+        x-exportParamName: "ConversionSourceId"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200_6"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /ecommerce/attribution/products/{conversionSource}/{conversionSourceId}:
+    get:
+      tags:
+      - "Ecommerce"
+      summary: "Get attributed product sales for a single Brevo campaign"
+      parameters:
+      - name: "conversionSource"
+        in: "path"
+        description: "The Brevo campaign type for which data will be retrieved"
+        required: true
+        type: "string"
+        enum:
+        - "email_campaign"
+        x-exportParamName: "ConversionSource"
+      - name: "conversionSourceId"
+        in: "path"
+        description: "The Brevo campaign id for which data will be retrieved"
+        required: true
+        type: "number"
+        format: "integer"
+        x-exportParamName: "ConversionSourceId"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200_7"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /orders:
+    get:
+      tags:
+      - "Ecommerce"
+      summary: "Get order details"
+      description: "Get all the orders"
+      operationId: "getOrders"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Number of documents per page"
+        required: false
+        type: "integer"
+        default: 50
+        maximum: 100
+        format: "int64"
+        x-exportParamName: "Limit"
+        x-optionalDataType: "Int64"
+      - name: "offset"
+        in: "query"
+        description: "Index of the first document in the page"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+        x-exportParamName: "Offset"
+        x-optionalDataType: "Int64"
+      - name: "sort"
+        in: "query"
+        description: "Sort the results in the ascending/descending order of record\
+          \ creation. Default order is **descending** if `sort` is not passed"
+        required: false
+        type: "string"
+        default: "desc"
+        enum:
+        - "asc"
+        - "desc"
+        x-exportParamName: "Sort"
+        x-optionalDataType: "String"
+      - name: "modifiedSince"
+        in: "query"
+        description: "Filter (urlencoded) the orders modified after a given UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time\
+          \ format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "ModifiedSince"
+        x-optionalDataType: "String"
+      - name: "createdSince"
+        in: "query"
+        description: "Filter (urlencoded) the orders created after a given UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time\
+          \ format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "CreatedSince"
+        x-optionalDataType: "String"
+      responses:
+        "200":
+          description: "orders fetched successfully"
+          examples:
+            response:
+              value:
+                orders:
+                - id: "order1803"
+                  createdAt: "2021-12-31T11:42:35.638+0000"
+                  updatedAt: "2022-03-03T14:48:31.867+0000"
+                  contact_id: 2
+                  status: "complete"
+                  amount: 2000
+                  storeId: "123"
+                  billing:
+                    address: "Sec 62, Noida"
+                    city: "Noida"
+                    countryCode: "IN"
+                    country: "India"
+                    phone: 9238283982
+                    postCode: 110001
+                    paymentMethod: "Net banking"
+                    region: "North India"
+                  products:
+                  - productId: 21
+                    quantity: 2
+                    variantId: "P100"
+                    price: 100
+                  - productId: 21
+                    quantity: 2
+                    variantId: "P15756"
+                    price: 100
+                  email: "testvisitor@sendinblue.com"
+                  coupons:
+                  - "flat50"
+                  - "flat40"
+                count: 1
+          schema:
+            $ref: "#/definitions/getOrders"
+        "400":
+          description: "bad request"
           schema:
             $ref: "#/definitions/errorModel"
   /orders/status:
@@ -7742,6 +9030,31 @@ paths:
           $ref: "#/definitions/createdBatchId"
         "400":
           description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /events:
+    post:
+      tags:
+      - "Events"
+      summary: "Create an event"
+      description: "Create an event to track a contact's interaction."
+      operationId: "createEvent"
+      parameters:
+      - in: "body"
+        name: "event"
+        required: true
+        schema:
+          $ref: "#/definitions/event"
+        x-exportParamName: "Event"
+      responses:
+        "204":
+          description: "An event posted"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
           schema:
             $ref: "#/definitions/errorModel"
   /categories:
@@ -7796,6 +9109,24 @@ paths:
         required: false
         type: "string"
         x-exportParamName: "Name"
+        x-optionalDataType: "String"
+      - name: "modifiedSince"
+        in: "query"
+        description: "Filter (urlencoded) the categories modified after a given UTC\
+          \ date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in\
+          \ date-time format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "ModifiedSince"
+        x-optionalDataType: "String"
+      - name: "createdSince"
+        in: "query"
+        description: "Filter (urlencoded) the categories created after a given UTC\
+          \ date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in\
+          \ date-time format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "CreatedSince"
         x-optionalDataType: "String"
       responses:
         "200":
@@ -8000,6 +9331,24 @@ paths:
         items:
           type: "string"
         x-exportParamName: "Categories"
+      - name: "modifiedSince"
+        in: "query"
+        description: "Filter (urlencoded) the orders modified after a given UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time\
+          \ format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "ModifiedSince"
+        x-optionalDataType: "String"
+      - name: "createdSince"
+        in: "query"
+        description: "Filter (urlencoded) the orders created after a given UTC date-time\
+          \ (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time\
+          \ format for accurate result.**\n"
+        required: false
+        type: "string"
+        x-exportParamName: "CreatedSince"
+        x-optionalDataType: "String"
       responses:
         "200":
           description: "All products listed"
@@ -8125,6 +9474,212 @@ paths:
           description: "bad request"
           schema:
             $ref: "#/definitions/errorModel"
+  /couponCollections:
+    get:
+      tags:
+      - "Coupons"
+      summary: "Get all your coupon collections"
+      operationId: "getCouponCollections"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Number of documents returned per page"
+        required: false
+        type: "integer"
+        default: 50
+        maximum: 100
+        minimum: 0
+        format: "int64"
+        x-exportParamName: "Limit"
+        x-optionalDataType: "Int64"
+      - name: "offset"
+        in: "query"
+        description: "Index of the first document on the page"
+        required: false
+        type: "integer"
+        default: 0
+        minimum: 0
+        format: "int64"
+        x-exportParamName: "Offset"
+        x-optionalDataType: "Int64"
+      - name: "sort"
+        in: "query"
+        description: "Sort the results by creation time in ascending/descending order"
+        required: false
+        type: "string"
+        default: "desc"
+        enum:
+        - "asc"
+        - "desc"
+        x-exportParamName: "Sort"
+        x-optionalDataType: "String"
+      - name: "sortBy"
+        in: "query"
+        description: "The field used to sort coupon collections"
+        required: false
+        type: "string"
+        default: "createdAt"
+        enum:
+        - "createdAt"
+        - "remainingCoupons"
+        - "expirationDate"
+        x-exportParamName: "SortBy"
+        x-optionalDataType: "String"
+      responses:
+        "200":
+          description: "Coupon collections"
+          examples:
+            response:
+              value:
+                collections:
+                - id: "23befbae-1505-47a8-bd27-e30ef739f32c"
+                  name: "Summer"
+                  defaultCoupon: "10 OFF"
+                  createdAt: "2017-03-12T12:30:00.000+0000"
+                  totalCoupons: 10000
+                  remainingCoupons: 5000
+          schema:
+            $ref: "#/definitions/getCouponCollection"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Record not found"
+          schema:
+            $ref: "#/definitions/errorModel"
+    post:
+      tags:
+      - "Coupons"
+      summary: "Create а coupon collection"
+      operationId: "createCouponCollection"
+      parameters:
+      - in: "body"
+        name: "createCouponCollection"
+        description: "Values to create a coupon collection"
+        required: true
+        schema:
+          $ref: "#/definitions/createCouponCollection"
+        x-exportParamName: "CreateCouponCollection"
+      responses:
+        "201":
+          description: "Coupon collection created"
+          schema:
+            $ref: "#/definitions/inline_response_201_3"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /couponCollections/{id}:
+    get:
+      tags:
+      - "Coupons"
+      summary: "Get a coupon collection by id"
+      operationId: "getCouponCollection"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the collection to return"
+        required: true
+        type: "string"
+        format: "uuidv4"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "Coupon collection"
+          examples:
+            response:
+              value:
+              - id: "23befbae-1505-47a8-bd27-e30ef739f32c"
+                name: "Summer"
+                defaultCoupon: "10 OFF"
+                createdAt: "2017-03-12T12:30:00.000+0000"
+                totalCoupons: 10000
+                remainingCoupons: 5000
+          schema:
+            $ref: "#/definitions/getCouponCollection"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Coupon collection not found"
+          schema:
+            $ref: "#/definitions/errorModel"
+    patch:
+      tags:
+      - "Coupons"
+      summary: "Update a coupon collection by id"
+      operationId: "updateCouponCollection"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the collection to update"
+        required: true
+        type: "string"
+        format: "uuidv4"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "updateCouponCollection"
+        description: "Values to update the coupon collection"
+        required: false
+        schema:
+          $ref: "#/definitions/updateCouponCollection"
+        x-exportParamName: "UpdateCouponCollection"
+      responses:
+        "200":
+          description: "Coupon collection updated"
+          schema:
+            $ref: "#/definitions/inline_response_200_8"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+  /coupons:
+    post:
+      tags:
+      - "Coupons"
+      summary: "Create coupons for a coupon collection"
+      operationId: "createCoupons"
+      parameters:
+      - in: "body"
+        name: "createCoupons"
+        description: "Values to create coupons"
+        required: true
+        schema:
+          $ref: "#/definitions/createCoupons"
+        x-exportParamName: "CreateCoupons"
+      responses:
+        "204":
+          description: "Coupons creation in progress"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "unauthorized"
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Coupon collection not found"
+          schema:
+            $ref: "#/definitions/errorModel"
   /whatsapp/sendMessage:
     post:
       tags:
@@ -8147,7 +9702,7 @@ paths:
         "201":
           description: "successfully created"
           schema:
-            $ref: "#/definitions/inline_response_201_2"
+            $ref: "#/definitions/inline_response_201_4"
         "400":
           description: "bad request"
           schema:
@@ -8416,7 +9971,7 @@ paths:
         "201":
           description: "successfully created"
           schema:
-            $ref: "#/definitions/inline_response_201_3"
+            $ref: "#/definitions/inline_response_201_5"
         "400":
           description: "bad request"
           schema:
@@ -8521,6 +10076,106 @@ paths:
           description: "Feed not found"
           schema:
             $ref: "#/definitions/errorModel"
+  /payments/requests:
+    post:
+      tags:
+      - "Payments"
+      summary: "Create a payment request"
+      operationId: "createPaymentRequest"
+      parameters:
+      - in: "body"
+        name: "create payment rquest"
+        description: "Create a payment request\n"
+        required: true
+        schema:
+          $ref: "#/definitions/createPaymentRequest"
+        x-exportParamName: "CreatePaymentRquest"
+      responses:
+        "201":
+          description: "Payment request created."
+          examples:
+            response:
+              value:
+                id: "6d4ec0b2b48ef803df4103ve"
+                url: "https://pay.brevo.com/6d4ec0b2b48ef803df4103ve"
+          schema:
+            $ref: "#/definitions/createPaymentResponse"
+        "400":
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "Unauthorized."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Permission denied. Either you don't have access to Brevo Payments\
+            \ or your Brevo Payments account is not validated."
+          schema:
+            $ref: "#/definitions/errorModel"
+  /payments/requests/{id}:
+    get:
+      tags:
+      - "Payments"
+      summary: "Get payment request details"
+      operationId: "getPaymentRequest"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the payment Request"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "Payment request details"
+          schema:
+            $ref: "#/definitions/getPaymentRequest"
+        "400":
+          description: "Bad request."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "401":
+          description: "Unauthorized."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Permission denied. Either you don't have access to Brevo Payments\
+            \ or your Brevo Payments account is not validated."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Payment request not found."
+          schema:
+            $ref: "#/definitions/errorModel"
+    delete:
+      tags:
+      - "Payments"
+      summary: "Delete a payment request."
+      operationId: "deletePaymentRequest"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the payment request."
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "204":
+          description: "Payment request deleted successfully."
+        "401":
+          description: "Unauthorized."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "403":
+          description: "Permission denied. Either you don't have access to Brevo Payments\
+            \ or your Brevo Payments account is not validated."
+          schema:
+            $ref: "#/definitions/errorModel"
+        "404":
+          description: "Payment request not found."
+          schema:
+            $ref: "#/definitions/errorModel"
 securityDefinitions:
   api-key:
     description: "The API key should be passed in the request headers as `api-key`\
@@ -8560,6 +10215,135 @@ definitions:
         description: "Get user activity logs"
         items:
           $ref: "#/definitions/getAccountActivity_logs"
+  getInvitedUsersList:
+    type: "object"
+    properties:
+      users:
+        type: "array"
+        description: "Get invited users list"
+        items:
+          $ref: "#/definitions/getInvitedUsersList_users"
+  getCorporateInvitedUsersList:
+    type: "object"
+    properties:
+      users:
+        type: "array"
+        description: "Get invited users list"
+        items:
+          $ref: "#/definitions/getCorporateInvitedUsersList_users"
+  getCorporateUserPermission:
+    type: "object"
+    required:
+    - "email"
+    - "feature_access"
+    - "groups"
+    - "status"
+    properties:
+      email:
+        type: "string"
+        example: "invitedUser@company.com"
+        description: "Email address of the user."
+      status:
+        type: "string"
+        example: "active / pending"
+        description: "Status of the invited user."
+      groups:
+        type: "array"
+        items:
+          $ref: "#/definitions/getCorporateUserPermission_groups"
+      feature_access:
+        $ref: "#/definitions/getCorporateUserPermission_feature_access"
+    description: "Check admin user permissions"
+  getUserPermission:
+    type: "object"
+    required:
+    - "email"
+    - "privileges"
+    - "status"
+    properties:
+      email:
+        type: "string"
+        example: "invitedUser@company.com"
+        description: "Email address of the user."
+      status:
+        type: "string"
+        example: "active"
+        description: "Status of the invited user."
+      privileges:
+        type: "array"
+        description: "Granular feature permissions given to the user."
+        items:
+          $ref: "#/definitions/getUserPermission_privileges"
+    description: "Check user permission"
+  putRevokeUserPermission:
+    type: "object"
+    required:
+    - "email"
+    properties:
+      email:
+        type: "string"
+        example: "invitedUser@company.com"
+        description: "Email address of the user."
+    description: "Revoke user permission"
+  putresendcancelinvitation:
+    type: "object"
+    required:
+    - "email"
+    properties:
+      email:
+        type: "string"
+        example: "invitedUser@company.com"
+        description: "Email address of the user."
+    description: "Revoke user permission"
+  inviteAdminUser:
+    type: "object"
+    required:
+    - "all_features_access"
+    - "email"
+    - "privileges"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        example: "inviteuser@example.com"
+        description: "Email address for the organization"
+      all_features_access:
+        type: "boolean"
+        example: false
+        description: "All access to the features"
+      groupIds:
+        type: "array"
+        example:
+        - "2baxxxxxxxxxxxxxxxxxxxxxcaa"
+        - "65axxxxxxxxxxxxxxxxxxxxxc5a"
+        description: "Ids of Group"
+        items:
+          type: "string"
+          description: "Group Id"
+      privileges:
+        type: "array"
+        items:
+          $ref: "#/definitions/inviteAdminUser_privileges"
+  inviteuser:
+    type: "object"
+    required:
+    - "all_features_access"
+    - "email"
+    - "privileges"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        example: "inviteuser@example.com"
+        description: "Email address for the organization"
+      all_features_access:
+        type: "boolean"
+        example: true
+        description: "All access to the features"
+      privileges:
+        type: "array"
+        items:
+          $ref: "#/definitions/inviteuser_privileges"
   getChildrenList:
     type: "object"
     properties:
@@ -8865,6 +10649,7 @@ definitions:
         - "account_under_validation"
         - "not_acceptable"
         - "bad_request"
+        - "unprocessable_entity"
       message:
         type: "string"
         example: "POST Method is not allowed on this path"
@@ -9078,6 +10863,10 @@ definitions:
         example: "20% OFF for 2017 Summer Sales"
         description: "Subject of the campaign. Only available if `abTesting` flag\
           \ of the campaign is `false`"
+      previewText:
+        type: "string"
+        example: "Thanks for your order!"
+        description: "Preview text or preheader of the email campaign"
       type:
         type: "string"
         example: "classic"
@@ -9150,6 +10939,22 @@ definitions:
       - "sender"
       - "testSent"
       properties:
+        utmCampaignValue:
+          type: "string"
+          example: "myutm"
+          description: "utm parameter associated with campaign"
+        utmSource:
+          type: "string"
+          example: "Brevo"
+          description: "source of utm parameter"
+        utmMedium:
+          type: "string"
+          example: "EMAIL"
+          description: "medium parameter"
+        utmID:
+          type: "integer"
+          example: 10
+          description: "utm id"
         testSent:
           type: "boolean"
           example: true
@@ -9676,7 +11481,7 @@ definitions:
   createWhatsAppTemplate:
     type: "object"
     required:
-    - "body"
+    - "bodyText"
     - "category"
     - "language"
     - "name"
@@ -9688,31 +11493,61 @@ definitions:
       language:
         type: "string"
         example: "en"
-        description: "Language of the template"
+        description: "Language of the template. For Example :\n**en** for English\n"
       category:
         type: "string"
         example: "MARKETING"
         description: "Category of the template"
         enum:
         - "MARKETING"
-        - "TRANSACTIONAL"
+        - "UTILITY"
       mediaUrl:
         type: "string"
         example: "https://attachment.domain.com"
-        description: "Absolute url of the media file **(no local file)**"
-      body:
+        description: "Absolute url of the media file **(no local file)** for the header.\
+          \ **Use this field in you want to add media in Template header and headerText\
+          \ is empty.**\nAllowed extensions for media files are:\n#### jpeg | png\
+          \ | mp4 | pdf\n"
+      bodyText:
         type: "string"
         example: "making it look like readable English"
-        description: "Body of the template"
-      headerHtml:
+        description: "Body of the template. **Maximum allowed characters are 1024**"
+      headerText:
         type: "string"
-        example: "<p>gfhgfhv ghgjh<span class=\\\"placeholder\\\" data-placeholder=\\\
-          \"{&quot;name&quot;:&quot;LASTNAME&quot;,&quot;defaultValue&quot;:&quot;hello&quot;,&quot;dataType&quot;:&quot;text&quot;}\\\
-          \">LASTNAME</span></p>\""
-        description: "Html content of the header"
-      headerType:
-        type: "boolean"
-        example: true
+        example: "Test WhatsApp Campaign"
+        description: "Text content of the header in the template.  **Maximum allowed\
+          \ characters are 45**\n**Use this field to add text content in template\
+          \ header and if mediaUrl is empty**\n"
+      source:
+        type: "string"
+        description: "source of the template"
+        enum:
+        - "Automation"
+        - "Conversations"
+  updateWhatsAppCampaign:
+    type: "object"
+    properties:
+      campaignName:
+        type: "string"
+        example: "Test WhatsApp"
+        description: "Name of the campaign"
+      campaignStatus:
+        type: "string"
+        example: "scheduled"
+        description: "Status of the campaign"
+        enum:
+        - "scheduled"
+        - "suspended"
+        default: "scheduled"
+      rescheduleFor:
+        type: "string"
+        example: "2017-06-01T10:30:00.000+0000"
+        description: "Reschedule the sending UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ)\
+          \ of campaign. **Prefer to pass your timezone in date-time format for accurate\
+          \ result.For example: **2017-06-01T12:30:00+02:00**\nUse this field to update\
+          \ the scheduledAt of any existing draft or scheduled WhatsApp campaign.\n"
+      recipients:
+        $ref: "#/definitions/createWhatsAppCampaign_recipients"
   createModel:
     type: "object"
     required:
@@ -9725,6 +11560,19 @@ definitions:
         description: "ID of the object created"
     example:
       id: 122
+  createPaymentResponse:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "string"
+        example: "6d4ec0b2b48ef803df4103ve"
+        description: "ID of the object created"
+      url:
+        type: "string"
+        example: "https://pay.brevo.com/payment/6d4ec0b2b48ef803df4103ve"
+        description: "URL of the payment request created"
   uploadImageModel:
     type: "object"
     required:
@@ -9798,8 +11646,12 @@ definitions:
         description: "ID of the Domain created"
       domain_name:
         type: "string"
-        example: "true"
+        example: "example.com"
         description: "Domain"
+      domain_provider:
+        type: "string"
+        example: "GoDaddy"
+        description: "Domain Provider"
       message:
         type: "string"
         example: "Domain added successfully. To authenticate it, add following DNS\
@@ -9808,9 +11660,15 @@ definitions:
       dns_records:
         $ref: "#/definitions/createDomainModel_dns_records"
     example:
-      domain_name: "true"
+      domain_name: "example.com"
+      domain_provider: "GoDaddy"
       dns_records:
         dkim_record:
+          type: "type"
+          value: "value"
+          host_name: "host_name"
+          status: true
+        dmarc_record:
           type: "type"
           value: "value"
           host_name: "host_name"
@@ -9839,7 +11697,7 @@ definitions:
     example:
       domain_name: "myexample.com"
       message: "Domain has been authenticated successfully."
-  getDomainonfigurationModel:
+  getDomainConfigurationModel:
     type: "object"
     required:
     - "authenticated"
@@ -9866,6 +11724,11 @@ definitions:
       authenticated: false
       dns_records:
         dkim_record:
+          type: "type"
+          value: "value"
+          host_name: "host_name"
+          status: true
+        dmarc_record:
           type: "type"
           value: "value"
           host_name: "host_name"
@@ -10295,6 +12158,17 @@ definitions:
         type: "string"
         example: "2017-05-12T13:15:00Z"
         description: "Last modification UTC date-time of the webhook (YYYY-MM-DDTHH:mm:ss.SSSZ)"
+      batched:
+        type: "boolean"
+        example: true
+        description: "To send batched webhooks"
+      auth:
+        $ref: "#/definitions/getWebhook_auth"
+      headers:
+        type: "array"
+        description: "Custom headers to be send with webhooks"
+        items:
+          $ref: "#/definitions/getWebhook_headers"
   getWebhooks:
     type: "object"
     required:
@@ -10311,7 +12185,6 @@ definitions:
     required:
     - "attributes"
     - "createdAt"
-    - "email"
     - "emailBlacklisted"
     - "id"
     - "listIds"
@@ -10949,6 +12822,10 @@ definitions:
         example: "Discover the New Collection !"
         description: "Subject of the campaign. Mandatory if abTesting is false. Ignored\
           \ if abTesting is true."
+      previewText:
+        type: "string"
+        example: "Thanks for your order!"
+        description: "Preview text or preheader of the email campaign"
       replyTo:
         type: "string"
         format: "email"
@@ -11137,6 +13014,10 @@ definitions:
         type: "string"
         example: "Discover the New Collection !"
         description: "Subject of the campaign"
+      previewText:
+        type: "string"
+        example: "Thanks for your order!"
+        description: "Preview text or preheader of the email campaign"
       replyTo:
         type: "string"
         format: "email"
@@ -11627,6 +13508,17 @@ definitions:
         type: "string"
         example: "example.com"
         description: "Inbound domain of webhook, required in case of event type `inbound`"
+      batched:
+        type: "boolean"
+        example: true
+        description: "To send batched webhooks"
+      auth:
+        $ref: "#/definitions/getWebhook_auth"
+      headers:
+        type: "array"
+        description: "Custom headers to be send with webhooks"
+        items:
+          $ref: "#/definitions/getWebhook_headers"
   updateWebhook:
     type: "object"
     properties:
@@ -11673,6 +13565,17 @@ definitions:
         type: "string"
         example: "example.com"
         description: "Inbound domain of webhook, used in case of event type `inbound`"
+      batched:
+        type: "boolean"
+        example: true
+        description: "To send batched webhooks"
+      auth:
+        $ref: "#/definitions/getWebhook_auth"
+      headers:
+        type: "array"
+        description: "Custom headers to be send with webhooks"
+        items:
+          $ref: "#/definitions/getWebhook_headers"
   createDoiContact:
     type: "object"
     required:
@@ -11692,9 +13595,13 @@ definitions:
         example:
           FNAME: "Elly"
           LNAME: "Roger"
+          COUNTRIES:
+          - "India"
+          - "China"
         description: "Pass the set of attributes and their values. These attributes\
-          \ must be present in your Brevo account. For eg. {'FNAME':'Elly', 'LNAME':'Roger'}"
-        properties: {}
+          \ must be present in your Brevo account. For eg. {'FNAME':'Elly', 'LNAME':'Roger',\
+          \ 'COUNTRIES':['India','China']}"
+        additionalProperties: {}
       includeListIds:
         type: "array"
         description: "Lists under user account where contact should be added"
@@ -11745,8 +13652,9 @@ definitions:
           LNAME: "Roger"
         description: "Pass the set of attributes and their values. The attribute's\
           \ parameter should be passed in capital letter while creating a contact.\
-          \ These attributes must be present in your Brevo account. For eg. {\"FNAME\"\
-          :\"Elly\", \"LNAME\":\"Roger\"}"
+          \ Values that don't match the attribute type (e.g. text or string in a date\
+          \ attribute) will be ignored.These attributes must be present in your Brevo\
+          \ account. For eg. {\"FNAME\":\"Elly\", \"LNAME\":\"Roger\"}"
         properties: {}
       emailBlacklisted:
         type: "boolean"
@@ -11789,14 +13697,15 @@ definitions:
           FNAME: "Ellie"
           LNAME: "Roger"
         description: "Pass the set of attributes to be updated. These attributes must\
-          \ be present in your account. To update existing email address of a contact\
-          \ with the new one please pass EMAIL in attributes. For example, `{ \"EMAIL\"\
-          :\"newemail@domain.com\", \"FNAME\":\"Ellie\", \"LNAME\":\"Roger\"}`. The\
-          \ attribute's parameter should be passed in capital letter while updating\
-          \ a contact. Keep in mind transactional attributes can be updated the same\
-          \ way as normal attributes. Mobile Number in \"SMS\" field should be passed\
-          \ with proper country code. For example {\"SMS\":\"+91xxxxxxxxxx\"} or {\"\
-          SMS\":\"0091xxxxxxxxxx\"}"
+          \ be present in your account. Values that don't match the attribute type\
+          \ (e.g. text or string in a date attribute) will be ignored.To update existing\
+          \ email address of a contact with the new one please pass EMAIL in attributes.\
+          \ For example, `{ \"EMAIL\":\"newemail@domain.com\", \"FNAME\":\"Ellie\"\
+          , \"LNAME\":\"Roger\"}`. The attribute's parameter should be passed in capital\
+          \ letter while updating a contact. Keep in mind transactional attributes\
+          \ can be updated the same way as normal attributes. Mobile Number in \"\
+          SMS\" field should be passed with proper country code. For example {\"SMS\"\
+          :\"+91xxxxxxxxxx\"} or {\"SMS\":\"0091xxxxxxxxxx\"}"
         properties: {}
       ext_id:
         type: "string"
@@ -11863,14 +13772,21 @@ definitions:
           :1, \"label\":\"male\"}, {\"value\":2, \"label\":\"female\"}]"
         items:
           $ref: "#/definitions/createAttribute_enumeration"
+      multiCategoryOptions:
+        type: "array"
+        description: "List of options you want to add for multiple-choice attribute.\
+          \ **Use only if the attribute's category is \"normal\" and attribute's type\
+          \ is \"multiple-choice\".** For example:\n**[\"USA\",\"INDIA\"]**\n"
+        items:
+          type: "string"
       type:
         type: "string"
         example: "text"
         description: "Type of the attribute. Use only if the attribute's category\
-          \ is 'normal', 'category' or 'transactional' ( type 'boolean' is only available\
-          \ if the category is 'normal' attribute, type 'id' is only available if\
-          \ the category is 'transactional' attribute & type 'category' is only available\
-          \ if the category is 'category' attribute )"
+          \ is 'normal', 'category' or 'transactional' ( type 'boolean' and 'multiple-choice'\
+          \ is only available if the category is 'normal' attribute, type 'id' is\
+          \ only available if the category is 'transactional' attribute & type 'category'\
+          \ is only available if the category is 'category' attribute )"
         enum:
         - "text"
         - "date"
@@ -11878,6 +13794,7 @@ definitions:
         - "boolean"
         - "id"
         - "category"
+        - "multiple-choice"
   updateAttribute:
     type: "object"
     properties:
@@ -11893,6 +13810,14 @@ definitions:
           :1, \"label\":\"male\"}, {\"value\":2, \"label\":\"female\"}]"
         items:
           $ref: "#/definitions/updateAttribute_enumeration"
+      multiCategoryOptions:
+        type: "array"
+        description: "Use this option to add multiple-choice attributes options only\
+          \ if the attribute's category is \"normal\". **This option is specifically\
+          \ designed for updating multiple-choice attributes**. For example:\n**[\"\
+          USA\",\"INDIA\"]**\n"
+        items:
+          type: "string"
   createList:
     type: "object"
     required:
@@ -11908,6 +13833,15 @@ definitions:
         format: "int64"
         example: 2
         description: "Id of the parent folder in which this list is to be created"
+  ssoTokenRequestCorporate:
+    type: "object"
+    required:
+    - "email"
+    properties:
+      email:
+        type: "string"
+        example: "vipin+subaccount@brevo.com"
+        description: "User email of sub-account organization"
   ssoTokenRequest:
     type: "object"
     required:
@@ -11941,6 +13875,11 @@ definitions:
         - "senders"
         - "sms_campaign"
         - "sms_transactional"
+      url:
+        type: "string"
+        example: "https://app.brevo.com/senders/domain/list"
+        description: "Set the full target URL after login success. The user will land\
+          \ directly on this target URL after login"
   createApiKeyRequest:
     type: "object"
     required:
@@ -12016,19 +13955,7 @@ definitions:
           \ increase of json body size while parsing. Please use fileUrl instead to\
           \ import bigger files.\n"
         items:
-          type: "object"
-          example:
-            email: "ndicky0@ocn.ne.jp"
-            attributes:
-              LNAME: "Noemi"
-              FNAME: "Dicky"
-              COUNTRY: "DE"
-              BIRTHDAY: "11/02/1989"
-              PREFERED_COLOR: "BLACK"
-          description: "List of attributes to be imported"
-          minProperties: 1
-          maxProperties: 2
-          additionalProperties: {}
+          $ref: "#/definitions/requestContactImport_jsonBody"
       listIds:
         type: "array"
         description: "Mandatory if newList is not defined. Ids of the lists in which\
@@ -12050,6 +13977,11 @@ definitions:
         type: "boolean"
         example: false
         description: "To blacklist all the contacts for email"
+        default: false
+      disableNotification:
+        type: "boolean"
+        example: false
+        description: "To disable email notification"
         default: false
       smsBlacklist:
         type: "boolean"
@@ -12294,12 +14226,17 @@ definitions:
         type: "integer"
         format: "int64"
         example: 252
-        description: "Number of accepted for the timeframe"
+        description: "Number of accepted SMS for the timeframe"
       rejected:
         type: "integer"
         format: "int64"
         example: 8
-        description: "Number of rejected for the timeframe"
+        description: "Number of rejected SMS for the timeframe"
+      skipped:
+        type: "integer"
+        format: "int64"
+        example: 1
+        description: "Number of skipped SMS for the timeframe"
   getTransacSmsReport:
     type: "object"
     properties:
@@ -12598,11 +14535,19 @@ definitions:
       timezone:
         type: "string"
         description: "Set the timezone of the sub-account"
+      groupIds:
+        type: "array"
+        description: "Set the group(s) for the sub-account"
+        items:
+          type: "string"
     example:
       companyName: "Test Sub-account"
       email: "test-sub@example.com"
       timezone: "Europe/Paris"
       language: "fr"
+      groupIds:
+      - "5f8f8c3b5f56a02d4433b3a7"
+      - "5f8f8c3b5f56a02d4433b3a8"
   createSubAccountResponse:
     type: "object"
     required:
@@ -12613,6 +14558,19 @@ definitions:
         format: "int64"
         example: 122
         description: "ID of the sub-account created"
+  corporateGroupDetailsResponse:
+    type: "object"
+    properties:
+      group:
+        $ref: "#/definitions/corporateGroupDetailsResponse_group"
+      sub-accounts:
+        type: "array"
+        items:
+          $ref: "#/definitions/corporateGroupDetailsResponse_subaccounts"
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/corporateGroupDetailsResponse_users"
   masterDetailsResponse:
     type: "object"
     properties:
@@ -12657,6 +14615,11 @@ definitions:
       companyName:
         type: "string"
         description: "Sub-account company name"
+      groups:
+        type: "array"
+        description: "List of group(s) associated with the sub-account"
+        items:
+          $ref: "#/definitions/subAccountDetailsResponse_groups"
       planInfo:
         $ref: "#/definitions/subAccountDetailsResponse_planInfo"
   subAccountUpdatePlanRequest:
@@ -12667,6 +14630,68 @@ definitions:
       features:
         $ref: "#/definitions/subAccountUpdatePlanRequest_features"
     description: "Details of the plan to be changed"
+    example:
+      credits:
+        email: 5000
+        sms: 2000
+        wpSubscribers: -1
+      features:
+        users: 15
+        landingPage: 20
+        inbox: 10
+  subAccountAppsToggleRequest:
+    type: "object"
+    properties:
+      inbox:
+        type: "boolean"
+        description: "Set this field to enable or disable Inbox on the sub-account\
+          \ / Not applicable on ENTv2"
+      whatsapp:
+        type: "boolean"
+        description: "Set this field to enable or disable Whatsapp campaigns on the\
+          \ sub-account"
+      automation:
+        type: "boolean"
+        description: "Set this field to enable or disable Automation on the sub-account"
+      email-campaigns:
+        type: "boolean"
+        description: "Set this field to enable or disable Email Campaigns on the sub-account"
+      sms-campaigns:
+        type: "boolean"
+        description: "Set this field to enable or disable SMS Marketing on the sub-account"
+      landing-pages:
+        type: "boolean"
+        description: "Set this field to enable or disable Landing pages on the sub-account"
+      transactional-emails:
+        type: "boolean"
+        description: "Set this field to enable or disable Transactional Email on the\
+          \ sub-account"
+      transactional-sms:
+        type: "boolean"
+        description: "Set this field to enable or disable Transactional SMS on the\
+          \ sub-account"
+      facebook-ads:
+        type: "boolean"
+        description: "Set this field to enable or disable Facebook ads on the sub-account"
+      web-push:
+        type: "boolean"
+        description: "Set this field to enable or disable Web Push on the sub-account"
+      meetings:
+        type: "boolean"
+        description: "Set this field to enable or disable Meetings on the sub-account"
+      conversations:
+        type: "boolean"
+        description: "Set this field to enable or disable Conversations on the sub-account"
+      crm:
+        type: "boolean"
+        description: "Set this field to enable or disable Sales CRM on the sub-account"
+    description: "List of enable/disable applications on the sub-account"
+    example:
+      landing-pages: true
+      sms-campaigns: false
+      whatsapp: true
+      meetings: true
+      web-push: false
   TaskTypes:
     type: "object"
     properties:
@@ -13027,6 +15052,14 @@ definitions:
   Pipeline:
     type: "object"
     properties:
+      pipeline:
+        type: "string"
+        example: "5ea675e3da0dd085acaea610"
+        description: "Pipeline id"
+      pipeline_name:
+        type: "string"
+        example: "Sales Pipeline"
+        description: "Pipeline Name"
       stages:
         type: "array"
         description: "List of stages"
@@ -13034,11 +15067,18 @@ definitions:
           $ref: "#/definitions/PipelineStage"
     description: "List of stages"
     example:
+      pipeline: "5ea675e3da0dd085acaea610"
       stages:
       - name: "New"
         id: "9e577ff7-8e42-4ab3-be26-2b5e01b42518"
       - name: "New"
         id: "9e577ff7-8e42-4ab3-be26-2b5e01b42518"
+      pipeline_name: "Sales Pipeline"
+  Pipelines:
+    type: "array"
+    description: "List of pipeline"
+    items:
+      $ref: "#/definitions/Pipeline"
   DealAttributes:
     type: "array"
     description: "List of deal attributes"
@@ -13347,6 +15387,77 @@ definitions:
       text: "Good morning! How can I help you?"
       type: "agent"
       visitorId: "kZMvWhf8npAu3H6qd57w2Hv6nh6rnxvg"
+  ConversionSourceMetrics:
+    type: "object"
+    required:
+    - "averageBasket"
+    - "conversionSource"
+    - "id"
+    - "ordersCount"
+    - "revenue"
+    properties:
+      id:
+        type: "number"
+        format: "integer"
+      conversionSource:
+        type: "string"
+        enum:
+        - "email_campaign"
+      ordersCount:
+        type: "number"
+        format: "integer"
+      revenue:
+        type: "number"
+        format: "float"
+      averageBasket:
+        type: "number"
+        format: "float"
+    example:
+      ordersCount: 6.02745618307040320615897144307382404804229736328125
+      revenue: 1.4658129
+      id: 0.80082819046101150206595775671303272247314453125
+      averageBasket: 5.962134
+      conversionSource: "email_campaign"
+  ConversionSourceProduct:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "string"
+        example: "1"
+      name:
+        type: "string"
+        example: "Milky Way Galaxy"
+      sku:
+        type: "string"
+        example: "sku-1"
+      price:
+        type: "number"
+        format: "float"
+        example: 1000.0
+      url:
+        type: "string"
+        example: "https://mydomain.com/products/alpina-panoma-classic"
+      imageUrl:
+        type: "string"
+        example: "http://mydomain.com/product-absoulte-url/img.jpeg"
+      ordersCount:
+        type: "integer"
+        example: 200
+      revenue:
+        type: "number"
+        format: "float"
+        example: 999.99
+    example:
+      ordersCount: 200
+      revenue: 999.99
+      price: 1000.0
+      imageUrl: "http://mydomain.com/product-absoulte-url/img.jpeg"
+      name: "Milky Way Galaxy"
+      id: "1"
+      sku: "sku-1"
+      url: "https://mydomain.com/products/alpina-panoma-classic"
   order:
     type: "object"
     required:
@@ -13380,6 +15491,10 @@ definitions:
         example: 308.42
         description: "Total amount of the order, including all shipping expenses,\
           \ tax and the price of items."
+      storeId:
+        type: "string"
+        example: "ST-21"
+        description: "ID of store where the order is placed"
       products:
         type: "array"
         items:
@@ -13412,6 +15527,14 @@ definitions:
         type: "string"
         example: "https://en.wikipedia.org/wiki/Webhook"
         description: "Notify Url provided by client to get the status of batch request"
+      historical:
+        type: "boolean"
+        example: true
+        description: "Defines wether you want your orders to be considered as live\
+          \ data or as historical data (import of past data, synchronising data).\
+          \ True: orders will not trigger any automation workflows. False: orders\
+          \ will trigger workflows as usual."
+        default: true
   createdBatchId:
     type: "object"
     required:
@@ -13421,6 +15544,27 @@ definitions:
         type: "number"
         example: 1.0
         description: "Batch ID of the request"
+  getOrders:
+    type: "object"
+    properties:
+      orders:
+        type: "array"
+        items:
+          type: "object"
+          allOf:
+          - type: "object"
+            properties:
+              contact_id:
+                type: "integer"
+                format: "int64"
+                example: 187588
+                description: "Contact ID for the order"
+          - $ref: "#/definitions/order"
+      count:
+        type: "integer"
+        format: "int64"
+        example: 17655
+        description: "Number of orders"
   getCategories:
     type: "object"
     required:
@@ -13511,6 +15655,10 @@ definitions:
         example: "2017-05-12T12:30:00.000+0000"
         description: "UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) of the category deleted\
           \ from the shop's database"
+      isDeleted:
+        type: "boolean"
+        example: true
+        description: "category deleted from the shop's database"
   createUpdateCategories:
     type: "object"
     required:
@@ -13535,6 +15683,10 @@ definitions:
         example: "2017-05-12T12:30:00.000+0000"
         description: "UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) of the category deleted\
           \ from the shop's database"
+      isDeleted:
+        type: "boolean"
+        example: true
+        description: "category deleted from the shop's database"
   createUpdateBatchCategory:
     type: "object"
     required:
@@ -13759,6 +15911,10 @@ definitions:
         example: "2017-05-12T12:30:00.000+0000"
         description: "UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) of the product deleted\
           \ from the shop's database"
+      isDeleted:
+        type: "boolean"
+        example: true
+        description: "product deleted from the shop's database"
   createUpdateBatchProducts:
     type: "object"
     required:
@@ -13832,6 +15988,10 @@ definitions:
         example: "2017-05-12T12:30:00.000+0000"
         description: "UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) of the product deleted\
           \ from the shop's database"
+      isDeleted:
+        type: "boolean"
+        example: true
+        description: "product deleted from the shop's database"
   createProductModel:
     type: "object"
     properties:
@@ -13840,6 +16000,104 @@ definitions:
         format: "int64"
         example: 122
         description: "ID of the Product when a new product is created"
+  event:
+    type: "object"
+    required:
+    - "event_name"
+    - "identifiers"
+    properties:
+      event_name:
+        type: "string"
+        example: "video_played"
+        description: "The name of the event that occurred. This is how you will find\
+          \ your event in Brevo. Limited to 255 characters, alphanumerical characters\
+          \ and - _ only."
+      event_date:
+        type: "string"
+        example: "2024-02-06T20:59:23.383Z"
+        description: "Timestamp of when the event occurred (e.g. \"2024-01-24T17:39:57+01:00\"\
+          ). If no value is passed, the timestamp of the event creation is used."
+      identifiers:
+        $ref: "#/definitions/event_identifiers"
+      contact_properties:
+        type: "object"
+        example:
+          AGE: 32
+          GENDER: "FEMALE"
+        description: "Properties defining the state of the contact associated to this\
+          \ event. Useful to update contact attributes defined in your contacts database\
+          \ while passing the event. For example: **\"FIRSTNAME\": \"Jane\" , \"AGE\"\
+          : 37**"
+        properties: {}
+      event_properties:
+        type: "object"
+        example:
+          video_title: "Brevo — The most approachable CRM suite"
+          vide_description: "Create your free account today!"
+          duration: 142
+          autoplayed: false
+          upload_date: "2023-11-24T12:09:10+01:00"
+        description: "Properties of the event. Top level properties and nested properties\
+          \ can be used to better segment contacts and personalise workflow conditions.\
+          \ The following field type are supported: string, number, boolean (true/false),\
+          \ date (Timestamp e.g. \"2024-01-24T17:39:57+01:00\"). Keys are limited\
+          \ to 255 characters, alphanumerical characters and - _ only. Size is limited\
+          \ to 50Kb."
+        properties: {}
+  getCouponCollection:
+    type: "object"
+    required:
+    - "createdAt"
+    - "defaultCoupon"
+    - "id"
+    - "name"
+    - "remainingCoupons"
+    - "totalCoupons"
+    properties:
+      id:
+        type: "string"
+        format: "uuidv4"
+        example: "23befbae-1505-47a8-bd27-e30ef739f32c"
+        description: "The id of the collection."
+      name:
+        type: "string"
+        format: "uuidv4"
+        example: "SummerPromotions"
+        description: "The name of the collection."
+      defaultCoupon:
+        type: "string"
+        example: "10 OFF"
+        description: "The default coupon of the collection."
+      createdAt:
+        type: "string"
+        format: "date-time"
+        example: "2023-01-06T05:03:47.053+0000"
+        description: "Datetime on which the collection was created."
+      totalCoupons:
+        type: "integer"
+        format: "int64"
+        example: 10000
+        description: "Total number of coupons in the collection."
+      remainingCoupons:
+        type: "integer"
+        format: "int64"
+        example: 5000
+        description: "Number of coupons that have not been sent yet."
+      expirationDate:
+        type: "string"
+        format: "date-time"
+        example: "2024-01-01T00:00:00Z"
+        description: "Expiration date for the coupon collection in RFC3339 format."
+      remainingDaysAlert:
+        type: "integer"
+        example: 5
+        description: "If present, an email notification is going to be sent the defined\
+          \ amount of days before the expiration date."
+      remainingCouponsAlert:
+        type: "integer"
+        example: 5
+        description: "If present, an email notification is going to be sent when the\
+          \ total number of available coupons falls below the defined threshold."
   createUpdateBatchProductsModel:
     type: "object"
     properties:
@@ -13873,6 +16131,14 @@ definitions:
         format: "mobile"
         example: "919876543210"
         description: "WhatsApp Number with country code. Example, 85264318721"
+      params:
+        type: "object"
+        example:
+          FNAME: "Joe"
+          LNAME: "Doe"
+        description: "Pass the set of attributes to customize the template. For example,\
+          \ {\"FNAME\":\"Joe\", \"LNAME\":\"Doe\"}."
+        properties: {}
       contactNumbers:
         type: "array"
         description: "List of phone numbers of the contacts"
@@ -14082,6 +16348,7 @@ definitions:
     required:
     - "event"
     - "notifyURL"
+    - "type"
     properties:
       days:
         type: "integer"
@@ -14102,6 +16369,13 @@ definitions:
         type: "string"
         example: "desc"
         description: "Sorting order of records (asc or desc)"
+      type:
+        type: "string"
+        example: "transactional"
+        description: "Filter the history based on webhook type"
+        enum:
+        - "transactional"
+        - "marketing"
       event:
         type: "string"
         example: "request"
@@ -14111,7 +16385,7 @@ definitions:
         - "missing_parameter"
         - "hardBounce"
         - "softBounce"
-        - "delivered\""
+        - "delivered"
         - "spam"
         - "request"
         - "opened"
@@ -14139,8 +16413,259 @@ definitions:
       messageId:
         type: "integer"
         example: "<23befbae-1505-47a8-bd27-e30ef739f32c@fr.sib>"
-        description: "Filter the history for a specific message id"
+        description: "Filter the history for a specific message id. Applicable only\
+          \ for transactional webhooks."
+  createPaymentRequest:
+    type: "object"
+    required:
+    - "cart"
+    - "contactId"
+    - "reference"
+    properties:
+      reference:
+        type: "string"
+        example: "Invoice #INV0001"
+        description: "Reference of the payment request, it will appear on the payment\
+          \ page.\n"
+      cart:
+        $ref: "#/definitions/cart"
+      contactId:
+        type: "integer"
+        format: "int64"
+        example: 43
+        description: "Brevo ID of the contact requested to pay.\n"
+      description:
+        type: "string"
+        example: "Shipping Cost for sending bottles to NYC"
+        description: "description of payment request.\n"
+      notification:
+        $ref: "#/definitions/notification"
+      configuration:
+        $ref: "#/definitions/configuration"
+  configuration:
+    required:
+    - "customSuccessUrl"
+    properties:
+      customSuccessUrl:
+        type: "string"
+        format: "url"
+        example: "https://my-company.com/payment-success"
+        description: "Absolute URL of the custom success page.\n"
+    description: "Optional. Redirect contact to a custom success page once payment\
+      \ is successful. If empty the default Brevo page will be displayed once a payment\
+      \ is validated\n"
+    example:
+      customSuccessUrl: "https://my-company.com/payment-success"
+  cart:
+    type: "object"
+    required:
+    - "currency"
+    - "specificAmount"
+    properties:
+      currency:
+        type: "string"
+        example: "EUR"
+        description: "Currency code for the payment amount.\n"
+        enum:
+        - "EUR"
+      specificAmount:
+        type: "integer"
+        format: "int64"
+        example: 1200
+        description: "Payment amount, in cents.\n e.g. if you want to request €12.00,\
+          \ then the amount in cents is 1200.\n"
+    description: "Specify the payment currency and amount.\n"
+    example:
+      specificAmount: 1200
+      currency: "EUR"
+  notification:
+    type: "object"
+    required:
+    - "channel"
+    - "text"
+    properties:
+      channel:
+        type: "string"
+        example: "email"
+        description: "Channel used to send the notifications.\n"
+        enum:
+        - "email"
+      text:
+        type: "string"
+        example: "Please pay for your yoga class."
+        description: "Use this field if you want to give more context to your contact\
+          \ about the payment request.\n"
+    description: "Optional. Use this object if you want to let Brevo send an email\
+      \ to the contact, with the payment request URL. If empty, no notifications (message\
+      \ and reminders) will be sent.\n"
+    example:
+      channel: "email"
+      text: "Please pay for your yoga class."
+  getPaymentRequest:
+    type: "object"
+    required:
+    - "cart"
+    - "notification"
+    - "reference"
+    - "status"
+    properties:
+      reference:
+        type: "string"
+        example: "Invoice #INV0001\n"
+        description: "Reference of the payment request, it will appear on the payment\
+          \ page.\n"
+      status:
+        type: "string"
+        example: "paid"
+        description: "Status of the payment request."
+        enum:
+        - "created"
+        - "sent"
+        - "reminderSent - paid"
+      configuration:
+        $ref: "#/definitions/configuration"
+      contactId:
+        type: "integer"
+        format: "int64"
+        example: 43
+        description: "Brevo ID of the contact requested to pay.\n"
+      numberOfRemindersSent:
+        type: "integer"
+        format: "int64"
+        example: 5
+        description: "number of reminders sent.\n"
+      cart:
+        $ref: "#/definitions/cart"
+      notification:
+        $ref: "#/definitions/notification"
+    example:
+      reference: "Invoice #INV0001\n"
+      notification:
+        channel: "email"
+        text: "Please pay for your yoga class."
+      configuration:
+        customSuccessUrl: "https://my-company.com/payment-success"
+      contactId: 43
+      cart:
+        specificAmount: 1200
+        currency: "EUR"
+      status: "paid"
+      numberOfRemindersSent: 5
   body:
+    type: "object"
+    required:
+    - "groupName"
+    properties:
+      groupName:
+        type: "string"
+        example: "My group"
+        description: "The name of the group of sub-accounts"
+      subAccountIds:
+        type: "array"
+        example:
+        - 234322
+        - 325553
+        - 893432
+        description: "Pass the list of sub-account Ids to be included in the group"
+        items:
+          type: "integer"
+          format: "int64"
+  inline_response_201:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+  body_1:
+    type: "object"
+    required:
+    - "ids"
+    - "ip"
+    properties:
+      ip:
+        type: "string"
+        example: "103.11.32.88"
+        description: "IP Address"
+      ids:
+        type: "array"
+        example:
+        - 234322
+        - 325553
+        - 893432
+        description: "Pass the list of sub-account Ids to be associated with the IP\
+          \ address"
+        items:
+          type: "integer"
+          format: "int64"
+  body_2:
+    type: "object"
+    required:
+    - "ids"
+    - "ip"
+    properties:
+      ip:
+        type: "string"
+        example: "103.11.32.88"
+        description: "IP Address"
+      ids:
+        type: "array"
+        example:
+        - 234322
+        - 325553
+        - 893432
+        description: "Pass the list of sub-account Ids to be dissociated from the\
+          \ IP address"
+        items:
+          type: "integer"
+          format: "int64"
+  body_3:
+    type: "object"
+    required:
+    - "groupName"
+    properties:
+      groupName:
+        type: "string"
+        example: "My group"
+        description: "The name of the group of sub-accounts"
+      subAccountIds:
+        type: "array"
+        example:
+        - 234322
+        - 325553
+        - 893432
+        description: "Pass the list of sub-account Ids to be included in the group"
+        items:
+          type: "integer"
+          format: "int64"
+  body_4:
+    type: "object"
+    required:
+    - "subAccountIds"
+    properties:
+      subAccountIds:
+        type: "array"
+        example:
+        - 423432
+        - 234323
+        - 87678
+        description: "List of sub-account ids"
+        items:
+          type: "integer"
+          format: "int64"
+  inline_response_200:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  inline_response_200_1:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique id of the group"
+      groupName:
+        type: "string"
+        description: "The name of the group of sub-accounts"
+  body_5:
     type: "object"
     required:
     - "name"
@@ -14162,7 +16687,27 @@ definitions:
         format: "int64"
         example: 91
         description: "Country code if phone_number is passed in attributes."
-  inline_response_200:
+      linkedContactsIds:
+        type: "array"
+        example:
+        - 1
+        - 2
+        - 3
+        description: "Contact ids to be linked with company"
+        items:
+          type: "integer"
+          format: "int64"
+      linkedDealsIds:
+        type: "array"
+        example:
+        - "61a5ce58c5d4795761045990"
+        - "61a5ce58c5d4795761045991"
+        - "61a5ce58c5d4795761045992"
+        description: "Deal ids to be linked with company"
+        items:
+          type: "string"
+          format: "objectID"
+  inline_response_200_2:
     type: "object"
     required:
     - "id"
@@ -14174,7 +16719,7 @@ definitions:
     description: "Created company id"
     example:
       id: "61a5cd07ca1347c82306ad06"
-  body_1:
+  body_6:
     type: "object"
     properties:
       name:
@@ -14200,7 +16745,7 @@ definitions:
         format: "int64"
         example: 91
         description: "Country code if phone_number is passed in attributes."
-  body_2:
+  body_7:
     type: "object"
     properties:
       linkContactIds:
@@ -14241,7 +16786,7 @@ definitions:
         description: "Deals ids for deals to be unlinked from company"
         items:
           type: "string"
-  body_3:
+  body_8:
     type: "object"
     required:
     - "name"
@@ -14255,9 +16800,33 @@ definitions:
         example:
           deal_owner: "6093d2425a9b436e9519d034"
           amount: 12
-        description: "Attributes fo\\r deal creation"
+        description: "Attributes for deal creation\n\nTo assign owner of a Deal you\
+          \ can send attributes.deal_owner and utilize the account email or ID.\n\n\
+          If you want to create a deal on a specific pipeline and stage you can use\
+          \ the following attributes `pipeline` and `deal_stage`.\n\nPipeline and\
+          \ deal_stage are ids you can fetch using this endpoint `/crm/pipeline/details/{pipelineID}`\n"
         properties: {}
-  inline_response_201:
+      linkedContactsIds:
+        type: "array"
+        example:
+        - 1
+        - 2
+        - 3
+        description: "Contact ids to be linked with deal"
+        items:
+          type: "integer"
+          format: "int64"
+      linkedCompaniesIds:
+        type: "array"
+        example:
+        - "61a5ce58c5d4795761045990"
+        - "61a5ce58c5d4795761045991"
+        - "61a5ce58c5d4795761045992"
+        description: "Company ids to be linked with deal"
+        items:
+          type: "string"
+          format: "objectID"
+  inline_response_201_1:
     type: "object"
     required:
     - "id"
@@ -14269,7 +16838,7 @@ definitions:
     description: "Created deal id"
     example:
       id: "61a5cd07ca1347c82306ad06"
-  body_4:
+  body_9:
     type: "object"
     properties:
       name:
@@ -14281,9 +16850,13 @@ definitions:
         example:
           deal_owner: "6093d2425a9b436e9519d034"
           amount: 12
-        description: "Attributes for deal update"
+        description: "Attributes for deal update\n\nTo assign owner of a Deal you\
+          \ can send attributes.deal_owner and utilize the account email or ID.\n\n\
+          If you wish to update the pipeline of a deal you need to provide the `pipeline`\
+          \ and the `deal_stage`.\n\nPipeline and deal_stage are ids you can fetch\
+          \ using this endpoint `/crm/pipeline/details/{pipelineID}`\n"
         properties: {}
-  body_5:
+  body_10:
     type: "object"
     properties:
       linkContactIds:
@@ -14324,7 +16897,22 @@ definitions:
         description: "Company ids to be unlinked from deal"
         items:
           type: "string"
-  body_6:
+  inline_response_200_3:
+    type: "object"
+    properties:
+      processId:
+        type: "integer"
+        example: 50
+        description: "The ID of the import process"
+    example:
+      processId: 50
+  inline_response_400:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "Bad request: With reason"
+  body_11:
     type: "object"
     required:
     - "date"
@@ -14361,7 +16949,8 @@ definitions:
       assignToId:
         type: "string"
         example: "5faab4b7f195bb3c4c31e62a"
-        description: "User id to whom task is assigned"
+        description: "To assign a task to a user you can use either the account email\
+          \ or ID."
       contactsIds:
         type: "array"
         example:
@@ -14391,7 +16980,7 @@ definitions:
           type: "string"
       reminder:
         $ref: "#/definitions/TaskReminder"
-  inline_response_201_1:
+  inline_response_201_2:
     type: "object"
     required:
     - "id"
@@ -14403,7 +16992,7 @@ definitions:
     description: "Task Details"
     example:
       id: "61a5cd07ca1347c82306ad06"
-  body_7:
+  body_12:
     type: "object"
     properties:
       name:
@@ -14434,7 +17023,8 @@ definitions:
       assignToId:
         type: "string"
         example: "5faab4b7f195bb3c4c31e62a"
-        description: "User id to whom task is assigned"
+        description: "To assign a task to a user you can use either the account email\
+          \ or ID."
       contactsIds:
         type: "array"
         example:
@@ -14462,7 +17052,7 @@ definitions:
         description: "Companies ids for companies a task is linked to"
         items:
           type: "string"
-  body_8:
+  body_13:
     type: "object"
     required:
     - "text"
@@ -14501,7 +17091,7 @@ definitions:
         type: "string"
         example: "Liz"
         description: "agent name"
-  body_9:
+  body_14:
     required:
     - "text"
     properties:
@@ -14512,7 +17102,7 @@ definitions:
       edition:
         value:
           text: "Good morning! How can I help you?"
-  body_10:
+  body_15:
     type: "object"
     required:
     - "text"
@@ -14540,7 +17130,7 @@ definitions:
         example: "PjRBMhWGen6aRHjif"
         description: "group ID. It can be found on group’s page. Optional if `agentId`\
           \ is set."
-  body_11:
+  body_16:
     type: "object"
     required:
     - "text"
@@ -14550,7 +17140,7 @@ definitions:
         example: "Your order has shipped! Here’s your tracking number: 9114 5847 4668\
           \ 7775 9233 54"
         description: "edited message text"
-  body_12:
+  body_17:
     type: "object"
     properties:
       agentId:
@@ -14578,7 +17168,242 @@ definitions:
         type: "string"
         example: "Liz"
         description: "agent name."
-  inline_response_201_2:
+  inline_response_200_4:
+    type: "object"
+    required:
+    - "code"
+    properties:
+      code:
+        type: "string"
+        example: "EUR"
+        description: "ISO 4217 compliant display currency code"
+    example:
+      code: "EUR"
+  setConfigDisplayCurrency:
+    type: "object"
+    required:
+    - "code"
+    properties:
+      code:
+        type: "string"
+        example: "EUR"
+        description: "ISO 4217 compliant display currency code"
+    example:
+      code: "EUR"
+  inline_response_200_5_totals:
+    type: "object"
+    required:
+    - "averageBasket"
+    - "ordersCount"
+    - "revenue"
+    properties:
+      ordersCount:
+        type: "number"
+        format: "integer"
+      revenue:
+        type: "number"
+        format: "float"
+      averageBasket:
+        type: "number"
+        format: "float"
+    description: "Attribution list aggregated totals"
+    example: "{\"ordersCount\":500,\"revenue\":1700.0,\"averageBasket\":3.4}"
+  inline_response_200_5:
+    type: "object"
+    required:
+    - "results"
+    - "totals"
+    properties:
+      results:
+        type: "array"
+        example:
+        - id: 2
+          conversionSource: "email_campaign"
+          ordersCount: 300
+          revenue: 900
+          averageBasket: 3.0
+        - id: 1
+          conversionSource: "email_campaign"
+          ordersCount: 200
+          revenue: 800
+          averageBasket: 4.0
+        description: "List of conversion attribution metrics"
+        items:
+          $ref: "#/definitions/ConversionSourceMetrics"
+      totals:
+        $ref: "#/definitions/inline_response_200_5_totals"
+    example:
+      totals: "{\"ordersCount\":500,\"revenue\":1700.0,\"averageBasket\":3.4}"
+      results:
+      - id: 2
+        conversionSource: "email_campaign"
+        ordersCount: 300
+        revenue: 900
+        averageBasket: 3.0
+      - id: 1
+        conversionSource: "email_campaign"
+        ordersCount: 200
+        revenue: 800
+        averageBasket: 4.0
+  inline_response_200_6:
+    type: "object"
+    required:
+    - "newCustomersCount"
+    properties:
+      ConversionSourceMetrics:
+        $ref: "#/definitions/ConversionSourceMetrics"
+      newCustomersCount:
+        type: "number"
+        format: "integer"
+    example:
+      newCustomersCount: 5.63737665663332876420099637471139430999755859375
+      ConversionSourceMetrics:
+        ordersCount: 6.02745618307040320615897144307382404804229736328125
+        revenue: 1.4658129
+        id: 0.80082819046101150206595775671303272247314453125
+        averageBasket: 5.962134
+        conversionSource: "email_campaign"
+  inline_response_200_7:
+    type: "object"
+    required:
+    - "products"
+    properties:
+      products:
+        type: "array"
+        description: "List of attributed products"
+        items:
+          $ref: "#/definitions/ConversionSourceProduct"
+    example:
+      products:
+      - ordersCount: 200
+        revenue: 999.99
+        price: 1000.0
+        imageUrl: "http://mydomain.com/product-absoulte-url/img.jpeg"
+        name: "Milky Way Galaxy"
+        id: "1"
+        sku: "sku-1"
+        url: "https://mydomain.com/products/alpina-panoma-classic"
+      - ordersCount: 200
+        revenue: 999.99
+        price: 1000.0
+        imageUrl: "http://mydomain.com/product-absoulte-url/img.jpeg"
+        name: "Milky Way Galaxy"
+        id: "1"
+        sku: "sku-1"
+        url: "https://mydomain.com/products/alpina-panoma-classic"
+  createCouponCollection:
+    type: "object"
+    required:
+    - "defaultCoupon"
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "10%OFF"
+        description: "Name of the coupons collection"
+      defaultCoupon:
+        type: "string"
+        example: "Winter"
+        description: "Default coupons collection name"
+      expirationDate:
+        type: "string"
+        format: "date-time"
+        example: "2022-01-02T00:00:00Z"
+        description: "Specify an expiration date for the coupon collection in RFC3339\
+          \ format. Use null to remove the expiration date."
+      remainingDaysAlert:
+        type: "integer"
+        example: 5
+        description: "Send a notification alert (email) when the remaining days until\
+          \ the expiration date are equal or fall bellow this number. Use null to\
+          \ disable alerts."
+      remainingCouponsAlert:
+        type: "integer"
+        example: 5
+        description: "Send a notification alert (email) when the remaining coupons\
+          \ count is equal or fall bellow this number. Use null to disable alerts."
+  inline_response_201_3:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "string"
+        format: "uuidv4"
+        example: "23befbae-1505-47a8-bd27-e30ef739f32c"
+        description: "The id of the created collection"
+    example:
+      id: "23befbae-1505-47a8-bd27-e30ef739f32c"
+  updateCouponCollection:
+    type: "object"
+    properties:
+      defaultCoupon:
+        type: "string"
+        example: "10 OFF"
+        description: "A default coupon to be used in case there are no coupons left"
+      expirationDate:
+        type: "string"
+        format: "date-time"
+        example: "2024-01-01T00:00:00Z"
+        description: "Specify an expiration date for the coupon collection in RFC3339\
+          \ format. Use null to remove the expiration date."
+      remainingDaysAlert:
+        type: "integer"
+        example: 5
+        description: "Send a notification alert (email) when the remaining days until\
+          \ the expiration date are equal or fall bellow this number. Use null to\
+          \ disable alerts."
+      remainingCouponsAlert:
+        type: "integer"
+        example: 5
+        description: "Send a notification alert (email) when the remaining coupons\
+          \ count is equal or fall bellow this number. Use null to disable alerts."
+  inline_response_200_8:
+    type: "object"
+    required:
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "string"
+        format: "uuidv4"
+        example: "23befbae-1505-47a8-bd27-e30ef739f32c"
+        description: "The id of the collection"
+      name:
+        type: "string"
+        format: "uuidv4"
+        example: "SummerPromotions"
+        description: "The name of the collection"
+      defaultCoupon:
+        type: "string"
+        example: "10 OFF"
+        description: "The default coupon of the collection"
+    example:
+      name: "SummerPromotions"
+      id: "23befbae-1505-47a8-bd27-e30ef739f32c"
+      defaultCoupon: "10 OFF"
+  createCoupons:
+    type: "object"
+    required:
+    - "collectionId"
+    - "coupons"
+    properties:
+      collectionId:
+        type: "string"
+        format: "uuidv4"
+        example: "23befbae-1505-47a8-bd27-e30ef739f32c"
+        description: "The id of the coupon collection for which the coupons will be\
+          \ created"
+      coupons:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+          example: "Uf12AF"
+          description: "Name of the coupon"
+        maxItems: 1000
+        minItems: 1
+  inline_response_201_4:
     type: "object"
     required:
     - "messageId"
@@ -14590,7 +17415,7 @@ definitions:
         description: "messageId of sent message"
     example:
       messageId: "23befbae-1505-47a8-bd27-e30ef739f32c"
-  inline_response_201_3:
+  inline_response_201_5:
     type: "object"
     required:
     - "id"
@@ -14726,6 +17551,256 @@ definitions:
         type: "string"
         example: "Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us)"
         description: "Browser details of the user who performed the activity."
+  getInvitedUsersList_feature_access:
+    type: "object"
+    properties:
+      marketing:
+        format: "string"
+        example: "custom"
+        description: "Marketing features accessiblity."
+      conversations:
+        format: "string"
+        example: "none"
+        description: "Conversations features accessiblity."
+      crm:
+        format: "string"
+        example: "full"
+        description: "CRM features accessiblity."
+    description: "Feature accessiblity given to the user."
+  getInvitedUsersList_users:
+    type: "object"
+    required:
+    - "email"
+    - "feature_access"
+    - "is_owner"
+    - "status"
+    properties:
+      email:
+        type: "string"
+        example: "pendingInvitedUser@company.com"
+        description: "Email address of the user."
+      is_owner:
+        type: "string"
+        example: "true"
+        description: "Flag for indicating is user owner of the organization."
+      status:
+        type: "string"
+        example: "active"
+        description: "Status of the invited user."
+      feature_access:
+        $ref: "#/definitions/getInvitedUsersList_feature_access"
+  getCorporateInvitedUsersList_groups:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: "a5c4f22c08d9ed37ef1ca342"
+        description: "group id"
+      name:
+        type: "string"
+        example: "My group"
+        description: "group name"
+    description: "Admin user groups list"
+  getCorporateInvitedUsersList_feature_access:
+    type: "object"
+    properties:
+      user_management:
+        type: "array"
+        description: "User management accessiblity."
+        items:
+          type: "string"
+          example: "all / none"
+      api_keys:
+        type: "array"
+        description: "Api keys accessiblity."
+        items:
+          type: "string"
+          example: "all / none"
+      my_plan:
+        type: "array"
+        description: "My plan accessiblity."
+        items:
+          type: "string"
+          example: "all / none"
+      apps_management:
+        type: "array"
+        description: "Apps management accessiblity | Not available in ENTv2"
+        items:
+          type: "string"
+          example: "all / none"
+    description: "Feature accessiblity given to the user. (Required only if status\
+      \ is active)"
+  getCorporateInvitedUsersList_users:
+    type: "object"
+    required:
+    - "email"
+    - "feature_access"
+    - "groups"
+    - "is_owner"
+    - "status"
+    properties:
+      groups:
+        $ref: "#/definitions/getCorporateInvitedUsersList_groups"
+      email:
+        type: "string"
+        example: "master-user@company.com"
+        description: "Email address of the user."
+      is_owner:
+        type: "string"
+        example: "false"
+        description: "Flag for indicating is user owner of the organization."
+      status:
+        type: "string"
+        example: "active"
+        description: "Status of the invited user."
+      feature_access:
+        $ref: "#/definitions/getCorporateInvitedUsersList_feature_access"
+  getCorporateUserPermission_groups:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: "6cbcxxxxxxxxxxxxxxxx457a"
+        description: "group identifier"
+      name:
+        type: "string"
+        example: "Staff"
+        description: "Group name"
+    description: "Groups details"
+  getCorporateUserPermission_feature_access:
+    type: "object"
+    properties:
+      api_keys:
+        type: "array"
+        description: "Permission on api keys"
+        items:
+          type: "string"
+          example: "all"
+          description: "Permission details"
+      my_plan:
+        type: "array"
+        description: "Permission on my plan"
+        items:
+          type: "string"
+          example: "all"
+          description: "Permission details"
+      user_management:
+        type: "array"
+        description: "Permission on user management"
+        items:
+          type: "string"
+          example: "none"
+          description: "Permission details"
+      apps_management:
+        type: "array"
+        description: "Permission on apps management"
+        items:
+          type: "string"
+          example: "all"
+          description: "Permission details"
+    description: "Granular feature permissions given to the user."
+  getUserPermission_privileges:
+    type: "object"
+    required:
+    - "feature"
+    - "permissions"
+    properties:
+      feature:
+        type: "string"
+        example: "Email campaign"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
+          example: "Create / edit / delete"
+  inviteAdminUser_privileges:
+    type: "object"
+    properties:
+      feature:
+        type: "string"
+        example: "user_management"
+        description: "Feature name"
+        enum:
+        - "my_plan"
+        - "api"
+        - "user_management"
+        - "app_management"
+      permissions:
+        type: "array"
+        description: "Permissions for a given feature"
+        items:
+          type: "string"
+          example: "'all', 'none'"
+          enum:
+          - "all"
+          - "none"
+    description: "Privileges given to the user"
+    example: "[{\"feature\":\"my_plan\",\"permissions\":[\"all\"]},{\"feature\":\"\
+      api\",\"permissions\":[\"none\"]}]"
+  inviteuser_privileges:
+    type: "object"
+    properties:
+      feature:
+        type: "string"
+        example: "email_campaigns"
+        description: "Feature name"
+        enum:
+        - "email_campaigns"
+        - "sms_campaigns"
+        - "contacts"
+        - "templates"
+        - "workflows"
+        - "facebook_ads"
+        - "landing_pages"
+        - "transactional_emails"
+        - "smtp_api"
+        - "user_management"
+        - "sales_platform"
+        - "phone"
+        - "conversations"
+        - "senders_domains_dedicated_ips"
+        - "push_notifications"
+      permissions:
+        type: "array"
+        description: "Permissions for a given feature"
+        items:
+          type: "string"
+          example: "'create_edit_delete', 'send_schedule_suspend'"
+          enum:
+          - "create_edit_delete"
+          - "send_schedule_suspend"
+          - "view"
+          - "import"
+          - "export"
+          - "list_and_attributes"
+          - "forms"
+          - "activate_deactivate"
+          - "activate_deactivate_pause"
+          - "settings"
+          - "schedule_pause"
+          - "all"
+          - "logs"
+          - "access"
+          - "assign"
+          - "configure"
+          - "manage_owned_deals_tasks"
+          - "manage_others_deals_tasks"
+          - "manage_owned_companies"
+          - "manage_others_companies"
+          - "reports"
+          - "senders_management"
+          - "domains_management"
+          - "dedicated_ips_management"
+          - "send"
+          - "smtp"
+          - "api_keys"
+          - "authorized_ips"
+          - "none"
+    description: "Privileges given to the user"
+    example: "[{\"feature\":\"email_campaigns\",\"permissions\":[\"create_edit_delete\"\
+      ,\"send_schedule_suspend\"]},{\"feature\":\"sms_campaigns\",\"permissions\"\
+      :[\"create_edit_delete\",\"send_schedule_suspend\"]},{\"feature\":\"facebook_ads\"\
+      ,\"permissions\":[\"create_edit_delete\",\"schedule_pause\"]}]"
   getChildInfo_credits:
     type: "object"
     properties:
@@ -14976,8 +18051,9 @@ definitions:
         example: "marketing@mycompany.com"
         description: "Sender email of the campaign"
       id:
-        type: "string"
-        example: "43"
+        type: "integer"
+        format: "int64"
+        example: 43
         description: "Sender id of the campaign"
   getWATemplates_templates:
     type: "object"
@@ -15093,7 +18169,7 @@ definitions:
   createWhatsAppCampaign_recipients:
     type: "object"
     properties:
-      excludedIds:
+      excludedListIds:
         type: "array"
         description: "List ids to exclude from the campaign"
         items:
@@ -15140,8 +18216,15 @@ definitions:
         $ref: "#/definitions/createDomainModel_dns_records_dkim_record"
       brevo_code:
         $ref: "#/definitions/createDomainModel_dns_records_dkim_record"
+      dmarc_record:
+        $ref: "#/definitions/createDomainModel_dns_records_dkim_record"
     example:
       dkim_record:
+        type: "type"
+        value: "value"
+        host_name: "host_name"
+        status: true
+      dmarc_record:
         type: "type"
         value: "value"
         host_name: "host_name"
@@ -15422,6 +18505,7 @@ definitions:
         - "replies"
         - "blocked"
         - "rejected"
+        - "skipped"
       reason:
         type: "string"
         example: "Message is undeliverable due to an incorrect / invalid / blacklisted\
@@ -15450,6 +18534,29 @@ definitions:
         type: "string"
         example: "43"
         description: "Sender id of the template"
+  getWebhook_auth:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+        example: "bearer"
+        description: "Type of authentication"
+      token:
+        type: "string"
+        example: "test-auth-token1234"
+        description: "Webhook authentication token"
+    description: "Add authentication on webhook url"
+  getWebhook_headers:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+        example: "cf-secret"
+        description: "Header key name"
+      value:
+        type: "string"
+        example: "test-header-value"
+        description: "Header value"
   getExtendedContactDetails_statistics_messagesSent:
     type: "object"
     required:
@@ -16187,6 +19294,17 @@ definitions:
         type: "string"
         example: "Login Email confirmation"
         description: "Custom subject specific to message version\n"
+      htmlContent:
+        type: "string"
+        example: "<!DOCTYPE html> <html> <body> <h1>Confirm you email</h1> <p>Please\
+          \ confirm your email address by clicking on the link below</p> </body> </html>"
+        description: "HTML body of the message. **Mandatory if 'templateId' is not\
+          \ passed, ignored if 'templateId' is passed**\n"
+      textContent:
+        type: "string"
+        example: "Please confirm your email address by clicking on the link https://text.domain.com"
+        description: "Plain Text body of the message. **Ignored if 'templateId' is\
+          \ passed**\n"
   updateBatchContacts_contacts:
     type: "object"
     properties:
@@ -16359,6 +19477,19 @@ definitions:
           \ otherwise. The id of sms campaign for which the corresponding action shall\
           \ be applied in the filter."
     description: "Set the filter for the contacts to be exported."
+  requestContactImport_jsonBody:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      attributes:
+        type: "object"
+        description: "List of attributes to be imported"
+        properties: {}
+    example: "{\"email\":\"ndicky0@ocn.ne.jp\",\"attributes\":{\"LNAME\":\"Noemi\"\
+      ,\"FNAME\":\"Dicky\",\"COUNTRY\":\"DE\",\"BIRTHDAY\":\"11/02/1989\",\"PREFERED_COLOR\"\
+      :\"BLACK\",\"WHATSAPP\":\"33689965433\",\"LANDLINE_NUMBER\":\"33689965433\"\
+      ,\"SMS\":\"33689965433\"}}"
   requestContactImport_newList:
     type: "object"
     properties:
@@ -16444,12 +19575,17 @@ definitions:
         type: "integer"
         format: "int64"
         example: 85
-        description: "Number of accepted for the date"
+        description: "Number of accepted SMS for the date"
       rejected:
         type: "integer"
         format: "int64"
         example: 1
-        description: "Number of rejected for the date"
+        description: "Number of rejected SMS for the date"
+      skipped:
+        type: "integer"
+        format: "int64"
+        example: 1
+        description: "Number of skipped SMS for the date"
   getTransacEmailContent_events:
     type: "object"
     required:
@@ -16608,12 +19744,22 @@ definitions:
         - "queued"
         - "processed"
         - "error"
+  subAccountsResponse_groups:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Group identifier"
+      name:
+        type: "string"
+        description: "Name of the group"
   subAccountsResponse_subAccounts:
     type: "object"
     required:
     - "active"
     - "companyName"
     - "createdAt"
+    - "groups"
     - "id"
     properties:
       id:
@@ -16630,6 +19776,48 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Timestamp when the sub-account was created"
+      groups:
+        type: "array"
+        description: "Group details"
+        items:
+          $ref: "#/definitions/subAccountsResponse_groups"
+  corporateGroupDetailsResponse_group:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Group id"
+      groupName:
+        type: "string"
+        description: "Name of the group"
+      createdAt:
+        type: "string"
+        description: "Group creation date"
+  corporateGroupDetailsResponse_subaccounts:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Id of the sub-account organzation"
+      companyName:
+        type: "string"
+        description: "Name of the sub-account organzation"
+      createdAt:
+        type: "string"
+        description: "Creation date of the sub-account organzation"
+  corporateGroupDetailsResponse_users:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Email address of the user"
+      lastName:
+        type: "string"
+        description: "Last name of the user"
+      firstName:
+        type: "string"
+        description: "First name of the user"
   masterDetailsResponse_billingInfo_name:
     type: "object"
     properties:
@@ -16686,10 +19874,20 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Quantity provided in the plan"
+      quantityWithOverages:
+        type: "integer"
+        format: "int64"
+        description: "Quantity with overages provided in the plan (only applicable\
+          \ on ENTv2)"
       used:
         type: "integer"
         format: "int64"
         description: "Quantity consumed by master"
+      usedOverages:
+        type: "integer"
+        format: "int64"
+        description: "Quantity consumed by sub-organizations over the admin plan limit\
+          \ (only applicable on ENTv2)"
       remaining:
         type: "integer"
         format: "int64"
@@ -16722,6 +19920,15 @@ definitions:
         items:
           $ref: "#/definitions/masterDetailsResponse_planInfo_features"
     description: "Plan details"
+  subAccountDetailsResponse_groups:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Group id"
+      name:
+        type: "string"
+        description: "Name of the group"
   subAccountDetailsResponse_planInfo_credits_emails:
     type: "object"
     properties:
@@ -16734,15 +19941,39 @@ definitions:
         format: "int64"
         description: "Available email messaging limits for use"
     description: "Email credits remaining on the sub-account"
+  subAccountDetailsResponse_planInfo_credits_sms:
+    type: "object"
+    properties:
+      quantity:
+        type: "integer"
+        format: "int64"
+        description: "Quantity of SMS messaging limits provided"
+      remaining:
+        type: "integer"
+        format: "int64"
+        description: "Available SMS messaging limits for use"
+    description: "SMS credits remaining on the sub-account"
+  subAccountDetailsResponse_planInfo_credits_wpSubscribers:
+    type: "object"
+    properties:
+      quantity:
+        type: "integer"
+        format: "int64"
+        description: "Quantity of Push sending limits provided"
+      remaining:
+        type: "integer"
+        format: "int64"
+        description: "Available Push sending limits for use"
+    description: "Push credits remaining on the sub-account"
   subAccountDetailsResponse_planInfo_credits:
     type: "object"
     properties:
-      sms:
-        type: "integer"
-        format: "int64"
-        description: "SMS credits remaining on the sub-account"
       emails:
         $ref: "#/definitions/subAccountDetailsResponse_planInfo_credits_emails"
+      sms:
+        $ref: "#/definitions/subAccountDetailsResponse_planInfo_credits_sms"
+      wpSubscribers:
+        $ref: "#/definitions/subAccountDetailsResponse_planInfo_credits_wpSubscribers"
     description: "Credits quota and remaining credits on the sub-account"
   subAccountDetailsResponse_planInfo_features_inbox:
     type: "object"
@@ -16755,7 +19986,7 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Available inboxes for use"
-    description: "Inbox details"
+    description: "Inbox details / Not available on ENTv2"
   subAccountDetailsResponse_planInfo_features_landingPage:
     type: "object"
     properties:
@@ -16767,7 +19998,7 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Available landing pages for use"
-    description: "Landing page details"
+    description: "Landing page details / Not available on ENTv2"
   subAccountDetailsResponse_planInfo_features_users:
     type: "object"
     properties:
@@ -16808,6 +20039,15 @@ definitions:
         type: "integer"
         format: "int64"
         description: "Number of email credits"
+      sms:
+        type: "number"
+        format: "float"
+        description: "Number of SMS credits | available in ENT-v2 only"
+      wpSubscribers:
+        type: "integer"
+        format: "int64"
+        description: "Number of Push credits, possible value is 0 and -1 | available\
+          \ in ENT-v2 only"
     description: "Credit details to update"
   subAccountUpdatePlanRequest_features:
     type: "object"
@@ -16819,11 +20059,11 @@ definitions:
       landingPage:
         type: "integer"
         format: "int64"
-        description: "Number of landing pages"
+        description: "Number of landing pages / Not required on ENTv2"
       inbox:
         type: "integer"
         format: "int64"
-        description: "Number of inboxes"
+        description: "Number of inboxes / Not required on ENTv2"
     description: "Features details to update"
   DealAttributes_inner:
     type: "object"
@@ -16971,6 +20211,10 @@ definitions:
         type: "string"
         example: "CA"
         description: "Billing country 2-letter ISO code."
+      country:
+        type: "string"
+        example: "Canada"
+        description: "Billing country name."
       phone:
         type: "string"
         example: "01559 032133"
@@ -16990,6 +20234,31 @@ definitions:
         example: "Northwestern Switzerland"
         description: "Exact region (state/province) for delivery and billing."
     description: "Billing details of an order."
+  event_identifiers:
+    type: "object"
+    properties:
+      email_id:
+        type: "string"
+        example: "jane.doe@example.com"
+        description: "Email Id associated with the event"
+      phone_id:
+        type: "string"
+        example: "+91xxxxxxxxxx"
+        description: "SMS associated with the event"
+      whatsapp_id:
+        type: "string"
+        example: "+91xxxxxxxxxx"
+        description: "whatsapp associated with the event"
+      landline_number_id:
+        type: "string"
+        example: "+91xxxxxxxxxx"
+        description: "landline_number associated with the event"
+      ext_id:
+        type: "string"
+        example: "abc123"
+        description: "ext_id associated with the event"
+    description: "Identifies the contact associated with the event. At least one identifier\
+      \ is required."
   getWhatsappEventReport_events:
     type: "object"
     required:

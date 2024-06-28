@@ -21,7 +21,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetProcess**](GetProcess.md)
+[**GetProcess**](getProcess.md)
 
 ### Authorization
 
@@ -56,7 +56,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetProcesses**](GetProcesses.md)
+[**GetProcesses**](getProcesses.md)
 
 ### Authorization
 

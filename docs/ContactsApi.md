@@ -49,7 +49,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PostContactInfo**](PostContactInfo.md)
+[**PostContactInfo**](postContactInfo.md)
 
 ### Authorization
 
@@ -103,7 +103,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateUpdateContactModel**](CreateUpdateContactModel.md)
+[**CreateUpdateContactModel**](createUpdateContactModel.md)
 
 ### Authorization
 
@@ -155,7 +155,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](CreateModel.md)
+[**CreateModel**](createModel.md)
 
 ### Authorization
 
@@ -181,7 +181,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](CreateModel.md)
+[**CreateModel**](createModel.md)
 
 ### Authorization
 
@@ -308,7 +308,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetAttributes**](GetAttributes.md)
+[**GetAttributes**](getAttributes.md)
 
 ### Authorization
 
@@ -346,7 +346,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetExtendedContactDetails**](GetExtendedContactDetails.md)
+[**GetExtendedContactDetails**](getExtendedContactDetails.md)
 
 ### Authorization
 
@@ -382,7 +382,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetContactCampaignStats**](GetContactCampaignStats.md)
+[**GetContactCampaignStats**](getContactCampaignStats.md)
 
 ### Authorization
 
@@ -416,10 +416,13 @@ Name | Type | Description  | Notes
  **modifiedSince** | **optional.String**| Filter (urlencoded) the contacts modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). Prefer to pass your timezone in date-time format for accurate result. | 
  **createdSince** | **optional.String**| Filter (urlencoded) the contacts created after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). Prefer to pass your timezone in date-time format for accurate result. | 
  **sort** | **optional.String**| Sort the results in the ascending/descending order of record creation. Default order is **descending** if &#x60;sort&#x60; is not passed | [default to desc]
+ **segmentId** | **optional.Int64**| Id of the segment. **Either listIds or segmentId can be passed.** | 
+ **listIds** | [**optional.Interface of []int64**](int64.md)| Ids of the list. **Either listIds or segmentId can be passed.** | 
+ **filter** | **optional.String**| Filter the contacts on the basis of attributes. **Allowed operator: equals. (e.g. filter&#x3D;equals(FIRSTNAME,\&quot;Antoine\&quot;), filter&#x3D;equals(B1, true), filter&#x3D;equals(DOB, \&quot;1989-11-23\&quot;))**  | 
 
 ### Return type
 
-[**GetContacts**](GetContacts.md)
+[**GetContacts**](getContacts.md)
 
 ### Authorization
 
@@ -457,7 +460,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetContacts**](GetContacts.md)
+[**GetContacts**](getContacts.md)
 
 ### Authorization
 
@@ -483,7 +486,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolder**](GetFolder.md)
+[**GetFolder**](getFolder.md)
 
 ### Authorization
 
@@ -520,7 +523,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolderLists**](GetFolderLists.md)
+[**GetFolderLists**](getFolderLists.md)
 
 ### Authorization
 
@@ -557,7 +560,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolders**](GetFolders.md)
+[**GetFolders**](getFolders.md)
 
 ### Authorization
 
@@ -571,7 +574,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **GetList**
-> GetExtendedList GetList(ctx, listId)
+> GetExtendedList GetList(ctx, listId, optional)
 Get a list's details
 
 ### Required Parameters
@@ -580,6 +583,16 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **listId** | **int64**| Id of the list | 
+ **optional** | ***GetListOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a GetListOpts struct
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **startDate** | **optional.String**| Mandatory if endDate is used. Ending (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a specific list id.Prefer to pass your timezone in date-time format for accurate result | 
+ **endDate** | **optional.String**| Mandatory if startDate is used. Ending (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a specific list id.Prefer to pass your timezone in date-time format for accurate result | 
 
 ### Return type
 
@@ -618,7 +631,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetLists**](GetLists.md)
+[**GetLists**](getLists.md)
 
 ### Authorization
 
@@ -655,7 +668,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSegments**](GetSegments.md)
+[**GetSegments**](getSegments.md)
 
 ### Authorization
 
@@ -672,7 +685,7 @@ Name | Type | Description  | Notes
 > CreatedProcessId ImportContacts(ctx, requestContactImport)
 Import contacts
 
-It returns the background process ID which on completion calls the notify URL that you have set in the input.
+It returns the background process ID which on completion calls the notify URL that you have set in the input.  **Note**: - Any contact attribute that doesn't exist in your account will be ignored at import end. 
 
 ### Required Parameters
 
@@ -683,7 +696,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](CreatedProcessId.md)
+[**CreatedProcessId**](createdProcessId.md)
 
 ### Authorization
 
@@ -710,7 +723,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PostContactInfo**](PostContactInfo.md)
+[**PostContactInfo**](postContactInfo.md)
 
 ### Authorization
 
@@ -738,7 +751,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](CreatedProcessId.md)
+[**CreatedProcessId**](createdProcessId.md)
 
 ### Authorization
 

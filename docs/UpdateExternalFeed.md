@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Username** | **string** | Username for authType &#x60;basic&#x60; | [optional] [default to null]
 **Password** | **string** | Password for authType &#x60;basic&#x60; | [optional] [default to null]
 **Token** | **string** | Token for authType &#x60;token&#x60; | [optional] [default to null]
-**Headers** | [**[]GetExternalFeedByUuidHeaders**](getExternalFeedByUUIDHeaders.md) | Custom headers for the feed | [optional] [default to null]
+**Headers** | [**[]GetExternalFeedByUuidHeaders**](getExternalFeedByUUID_headers.md) | Custom headers for the feed | [optional] [default to null]
 **MaxRetries** | **int32** | Maximum number of retries on the feed url | [optional] [default to null]
 **Cache** | **bool** | Toggle caching of feed url response | [optional] [default to null]
 

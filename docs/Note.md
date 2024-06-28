@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Text** | **string** | Text content of a note | [default to null]
 **ContactIds** | **[]int32** | Contact ids linked to a note | [optional] [default to null]
 **DealIds** | **[]string** | Deal ids linked to a note | [optional] [default to null]
-**AuthorId** | **map[string]interface{}** | Account details of user which created the note | [optional] [default to null]
+**AuthorId** | [**map[string]interface{}**](interface{}.md) | Account details of user which created the note | [optional] [default to null]
 **CreatedAt** | [**time.Time**](time.Time.md) | Note created date/time | [optional] [default to null]
 **UpdatedAt** | [**time.Time**](time.Time.md) | Note updated date/time | [optional] [default to null]
 

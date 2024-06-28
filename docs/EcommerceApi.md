@@ -11,10 +11,16 @@ Method | HTTP request | Description
 [**CreateUpdateCategory**](EcommerceApi.md#CreateUpdateCategory) | **Post** /categories | Create/Update a category
 [**CreateUpdateProduct**](EcommerceApi.md#CreateUpdateProduct) | **Post** /products | Create/Update a product
 [**EcommerceActivatePost**](EcommerceApi.md#EcommerceActivatePost) | **Post** /ecommerce/activate | Activate the eCommerce app
+[**EcommerceAttributionMetricsConversionSourceConversionSourceIdGet**](EcommerceApi.md#EcommerceAttributionMetricsConversionSourceConversionSourceIdGet) | **Get** /ecommerce/attribution/metrics/{conversionSource}/{conversionSourceId} | Get detailed attribution metrics for a single Brevo campaign
+[**EcommerceAttributionMetricsGet**](EcommerceApi.md#EcommerceAttributionMetricsGet) | **Get** /ecommerce/attribution/metrics | Get attribution metrics for one or more Brevo campaigns
+[**EcommerceAttributionProductsConversionSourceConversionSourceIdGet**](EcommerceApi.md#EcommerceAttributionProductsConversionSourceConversionSourceIdGet) | **Get** /ecommerce/attribution/products/{conversionSource}/{conversionSourceId} | Get attributed product sales for a single Brevo campaign
+[**EcommerceConfigDisplayCurrencyGet**](EcommerceApi.md#EcommerceConfigDisplayCurrencyGet) | **Get** /ecommerce/config/displayCurrency | Get the ISO 4217 compliant display currency code for your Brevo account
 [**GetCategories**](EcommerceApi.md#GetCategories) | **Get** /categories | Return all your categories
 [**GetCategoryInfo**](EcommerceApi.md#GetCategoryInfo) | **Get** /categories/{id} | Get a category details
+[**GetOrders**](EcommerceApi.md#GetOrders) | **Get** /orders | Get order details
 [**GetProductInfo**](EcommerceApi.md#GetProductInfo) | **Get** /products/{id} | Get a product&#39;s details
 [**GetProducts**](EcommerceApi.md#GetProducts) | **Get** /products | Return all your products
+[**SetConfigDisplayCurrency**](EcommerceApi.md#SetConfigDisplayCurrency) | **Post** /ecommerce/config/displayCurrency | Set the ISO 4217 compliant display currency code for your Brevo account
 
 
 # **CreateBatchOrder**
@@ -86,7 +92,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateUpdateBatchCategoryModel**](CreateUpdateBatchCategoryModel.md)
+[**CreateUpdateBatchCategoryModel**](createUpdateBatchCategoryModel.md)
 
 ### Authorization
 
@@ -112,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateUpdateBatchProductsModel**](CreateUpdateBatchProductsModel.md)
+[**CreateUpdateBatchProductsModel**](createUpdateBatchProductsModel.md)
 
 ### Authorization
 
@@ -138,7 +144,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateCategoryModel**](CreateCategoryModel.md)
+[**CreateCategoryModel**](createCategoryModel.md)
 
 ### Authorization
 
@@ -164,7 +170,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateProductModel**](CreateProductModel.md)
+[**CreateProductModel**](createProductModel.md)
 
 ### Authorization
 
@@ -201,6 +207,117 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **EcommerceAttributionMetricsConversionSourceConversionSourceIdGet**
+> InlineResponse2006 EcommerceAttributionMetricsConversionSourceConversionSourceIdGet(ctx, conversionSource, conversionSourceId)
+Get detailed attribution metrics for a single Brevo campaign
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **conversionSource** | **string**| The Brevo campaign type for which data will be retrieved | 
+  **conversionSourceId** | **float32**| The Brevo campaign id for which data will be retrieved | 
+
+### Return type
+
+[**InlineResponse2006**](inline_response_200_6.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **EcommerceAttributionMetricsGet**
+> InlineResponse2005 EcommerceAttributionMetricsGet(ctx, optional)
+Get attribution metrics for one or more Brevo campaigns
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+ **optional** | ***EcommerceAttributionMetricsGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a EcommerceAttributionMetricsGetOpts struct
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **periodFrom** | **optional.Time**| When getting metrics for a specific period, define the starting datetime in RFC3339 format | 
+ **periodTo** | **optional.Time**| When getting metrics for a specific period, define the end datetime in RFC3339 format | 
+ **emailCampaignId** | [**optional.Interface of []float32**](float32.md)| The email campaign id(s) to get metrics for | 
+
+### Return type
+
+[**InlineResponse2005**](inline_response_200_5.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **EcommerceAttributionProductsConversionSourceConversionSourceIdGet**
+> InlineResponse2007 EcommerceAttributionProductsConversionSourceConversionSourceIdGet(ctx, conversionSource, conversionSourceId)
+Get attributed product sales for a single Brevo campaign
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **conversionSource** | **string**| The Brevo campaign type for which data will be retrieved | 
+  **conversionSourceId** | **float32**| The Brevo campaign id for which data will be retrieved | 
+
+### Return type
+
+[**InlineResponse2007**](inline_response_200_7.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **EcommerceConfigDisplayCurrencyGet**
+> InlineResponse2004 EcommerceConfigDisplayCurrencyGet(ctx, )
+Get the ISO 4217 compliant display currency code for your Brevo account
+
+### Required Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**InlineResponse2004**](inline_response_200_4.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **GetCategories**
 > GetCategories GetCategories(ctx, optional)
 Return all your categories
@@ -222,10 +339,12 @@ Name | Type | Description  | Notes
  **sort** | **optional.String**| Sort the results in the ascending/descending order of record creation. Default order is **descending** if &#x60;sort&#x60; is not passed | [default to desc]
  **ids** | [**optional.Interface of []string**](string.md)| Filter by category ids | 
  **name** | **optional.String**| Filter by category name | 
+ **modifiedSince** | **optional.String**| Filter (urlencoded) the categories modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
+ **createdSince** | **optional.String**| Filter (urlencoded) the categories created after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
 
 ### Return type
 
-[**GetCategories**](GetCategories.md)
+[**GetCategories**](getCategories.md)
 
 ### Authorization
 
@@ -251,7 +370,46 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCategoryDetails**](GetCategoryDetails.md)
+[**GetCategoryDetails**](getCategoryDetails.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **GetOrders**
+> GetOrders GetOrders(ctx, optional)
+Get order details
+
+Get all the orders
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+ **optional** | ***GetOrdersOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a GetOrdersOpts struct
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **limit** | **optional.Int64**| Number of documents per page | [default to 50]
+ **offset** | **optional.Int64**| Index of the first document in the page | [default to 0]
+ **sort** | **optional.String**| Sort the results in the ascending/descending order of record creation. Default order is **descending** if &#x60;sort&#x60; is not passed | [default to desc]
+ **modifiedSince** | **optional.String**| Filter (urlencoded) the orders modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
+ **createdSince** | **optional.String**| Filter (urlencoded) the orders created after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
+
+### Return type
+
+[**GetOrders**](getOrders.md)
 
 ### Authorization
 
@@ -277,7 +435,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetProductDetails**](GetProductDetails.md)
+[**GetProductDetails**](getProductDetails.md)
 
 ### Authorization
 
@@ -318,10 +476,38 @@ Name | Type | Description  | Notes
  **priceEq** | **optional.Float32**| Price filter for products equals to particular amount | 
  **priceNe** | **optional.Float32**| Price filter for products not equals to particular amount | 
  **categories** | [**optional.Interface of []string**](string.md)| Filter by category ids | 
+ **modifiedSince** | **optional.String**| Filter (urlencoded) the orders modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
+ **createdSince** | **optional.String**| Filter (urlencoded) the orders created after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). **Prefer to pass your timezone in date-time format for accurate result.**  | 
 
 ### Return type
 
-[**GetProducts**](GetProducts.md)
+[**GetProducts**](getProducts.md)
+
+### Authorization
+
+[api-key](../README.md#api-key), [partner-key](../README.md#partner-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **SetConfigDisplayCurrency**
+> SetConfigDisplayCurrency SetConfigDisplayCurrency(ctx, setConfigDisplayCurrency)
+Set the ISO 4217 compliant display currency code for your Brevo account
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **setConfigDisplayCurrency** | [**SetConfigDisplayCurrency**](SetConfigDisplayCurrency.md)| set ISO 4217 compliant display currency code payload | 
+
+### Return type
+
+[**SetConfigDisplayCurrency**](setConfigDisplayCurrency.md)
 
 ### Authorization
 

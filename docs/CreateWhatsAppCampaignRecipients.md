@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ExcludedIds** | **[]int64** | List ids to exclude from the campaign | [optional] [default to null]
+**ExcludedListIds** | **[]int64** | List ids to exclude from the campaign | [optional] [default to null]
 **ListIds** | **[]int64** | **Mandatory if scheduledAt is not empty**. List Ids to send the campaign to  | [optional] [default to null]
 **Segments** | **[]int64** | **Mandatory if listIds are not used**. Segment ids to send the campaign to.  | [optional] [default to null]
 
