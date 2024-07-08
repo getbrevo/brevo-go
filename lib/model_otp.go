@@ -12,5 +12,5 @@ package lib
 
 type Otp struct {
 	// 6 digit OTP received on email
-	Name int32 `json:"name,omitempty"`
+	Otp int32 `json:"otp,omitempty"`
 }
