@@ -12,7 +12,7 @@ package lib
 
 type CreateDomainModel struct {
 	// ID of the Domain created
-	Id int64 `json:"id"`
+	Id string `json:"id"`
 	// Domain
 	DomainName string `json:"domain_name,omitempty"`
 	// Success message
