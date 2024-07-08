@@ -11,6 +11,7 @@
 package lib
 
 type CreateDomainModelDnsRecords struct {
-	DkimRecord *CreateDomainModelDnsRecordsDkimRecord `json:"dkim_record,omitempty"`
-	BrevoCode  *CreateDomainModelDnsRecordsDkimRecord `json:"brevo_code,omitempty"`
+	DkimRecord  *CreateDomainModelDnsRecordsDkimRecord `json:"dkim_record,omitempty"`
+	BrevoCode   *CreateDomainModelDnsRecordsDkimRecord `json:"brevo_code,omitempty"`
+	DmarcRecord *CreateDomainModelDnsRecordsDkimRecord `json:"dmarc_record,omitempty"`
 }

@@ -12,7 +12,7 @@ package lib
 
 type GetDomainsListDomains struct {
 	// Id of the domain
-	Id int64 `json:"id"`
+	Id string `json:"id"`
 	// Domain name
 	DomainName string `json:"domain_name"`
 	// Status of domain authentication (true=authenticated, false=non authenticated)
