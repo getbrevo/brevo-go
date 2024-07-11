@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **ModifiedAt** | **string** | Last modification UTC date-time of the contact (YYYY-MM-DDTHH:mm:ss.SSSZ) | [default to null]
 **ListIds** | **[]int64** |  | [default to null]
 **ListUnsubscribed** | **[]int64** |  | [optional] [default to null]
-**Attributes** | [**map[string]interface{}**](interface{}.md) | Set of attributes of the contact | [default to null]
+**Attributes** | [**map[string]interface{}**]| Set of attributes of the contact | [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

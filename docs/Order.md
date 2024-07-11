@@ -9,9 +9,9 @@ Name | Type | Description | Notes
 **Status** | **string** | State of the order. | [default to null]
 **Amount** | **float32** | Total amount of the order, including all shipping expenses, tax and the price of items. | [default to null]
 **StoreId** | **string** | ID of store where the order is placed | [optional] [default to null]
-**Products** | [**[]OrderProducts**](order_products.md) |  | [default to null]
+**Products** | [**[]OrderProducts**](OrderProducts.md) |  | [default to null]
 **Email** | **string** | Email of the contact, Mandatory if \&quot;phone\&quot; field is not passed in \&quot;billing\&quot; parameter. | [optional] [default to null]
-**Billing** | [***OrderBilling**](order_billing.md) |  | [optional] [default to null]
+**Billing** | [***OrderBilling**](OrderBilling.md) |  | [optional] [default to null]
 **Coupons** | **[]string** | Coupons applied to the order. Stored case insensitive. | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

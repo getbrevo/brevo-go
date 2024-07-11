@@ -22,7 +22,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatePaymentResponse**](createPaymentResponse.md)
+[**CreatePaymentResponse**](CreatePaymentResponse.md)
 
 ### Authorization
 
@@ -74,7 +74,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetPaymentRequest**](getPaymentRequest.md)
+[**GetPaymentRequest**](GetPaymentRequest.md)
 
 ### Authorization
 

@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Tag** | **string** | Tag of the campaign | [optional] [default to null]
-**Sender** | [***UpdateEmailCampaignSender**](updateEmailCampaign_sender.md) |  | [optional] [default to null]
+**Sender** | [***UpdateEmailCampaignSender**](UpdateEmailCampaignSender.md) |  | [optional] [default to null]
 **Name** | **string** | Name of the campaign | [optional] [default to null]
 **HtmlContent** | **string** | Body of the message (HTML version). If the campaign is designed using Drag &amp; Drop editor via HTML content, then the design page will not have Drag &amp; Drop editor access for that campaign. REQUIRED if htmlUrl is empty | [optional] [default to null]
 **HtmlUrl** | **string** | Url which contents the body of the email message. REQUIRED if htmlContent is empty | [optional] [default to null]
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **PreviewText** | **string** | Preview text or preheader of the email campaign | [optional] [default to null]
 **ReplyTo** | **string** | Email on which campaign recipients will be able to reply to | [optional] [default to null]
 **ToField** | **string** | To personalize the «To» Field. If you want to include the first name and last name of your recipient, add {FNAME} {LNAME}. These contact attributes must already exist in your Brevo account. If input parameter &#39;params&#39; used please use {{contact.FNAME}} {{contact.LNAME}} for personalization | [optional] [default to null]
-**Recipients** | [***UpdateEmailCampaignRecipients**](updateEmailCampaign_recipients.md) |  | [optional] [default to null]
+**Recipients** | [***UpdateEmailCampaignRecipients**](UpdateEmailCampaignRecipients.md) |  | [optional] [default to null]
 **AttachmentUrl** | **string** | Absolute url of the attachment (no local file). Extension allowed: xlsx, xls, ods, docx, docm, doc, csv, pdf, txt, gif, jpg, jpeg, png, tif, tiff, rtf, bmp, cgm, css, shtml, html, htm, zip, xml, ppt, pptx, tar, ez, ics, mobi, msg, pub and eps | [optional] [default to null]
 **InlineImageActivation** | **bool** | Status of inline image. inlineImageActivation &#x3D; false means image can’t be embedded, &amp; inlineImageActivation &#x3D; true means image can be embedded, in the email. You cannot send a campaign of more than 4MB with images embedded in the email. Campaigns with the images embedded in the email must be sent to less than 5000 contacts. | [optional] [default to null]
 **MirrorActive** | **bool** | Status of mirror links in campaign. mirrorActive &#x3D; false means mirror links are deactivated, &amp; mirrorActive &#x3D; true means mirror links are activated, in the campaign | [optional] [default to null]

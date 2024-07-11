@@ -24,7 +24,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2013**](inline_response_201_3.md)
+[**InlineResponse2013**](InlineResponse2013.md)
 
 ### Authorization
 
@@ -76,7 +76,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCouponCollection**](getCouponCollection.md)
+[**GetCouponCollection**](GetCouponCollection.md)
 
 ### Authorization
 
@@ -112,7 +112,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCouponCollection**](getCouponCollection.md)
+[**GetCouponCollection**](GetCouponCollection.md)
 
 ### Authorization
 
@@ -147,7 +147,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2008**](inline_response_200_8.md)
+[**InlineResponse2008**](InlineResponse2008.md)
 
 ### Authorization
 

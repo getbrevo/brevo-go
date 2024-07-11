@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 **TestSent** | **bool** | Retrieved the status of test email sending. (true&#x3D;Test email has been sent  false&#x3D;Test email has not been sent) | [default to null]
 **Header** | **string** | Header of the campaign | [default to null]
 **Footer** | **string** | Footer of the campaign | [default to null]
-**Sender** | [***GetExtendedCampaignOverviewSender**](getExtendedCampaignOverview_sender.md) |  | [default to null]
+**Sender** | [***GetExtendedCampaignOverviewSender**](GetExtendedCampaignOverviewSender.md) |  | [default to null]
 **ReplyTo** | **string** | Email defined as the \&quot;Reply to\&quot; of the campaign | [default to null]
 **ToField** | **string** | Customisation of the \&quot;to\&quot; field of the campaign | [optional] [default to null]
 **HtmlContent** | **string** | HTML content of the campaign | [default to null]

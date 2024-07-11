@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 **TestSent** | **bool** | Retrieved the status of test email sending. (true&#x3D;Test email has been sent  false&#x3D;Test email has not been sent) | [default to null]
 **Header** | **string** | Header of the campaign | [default to null]
 **Footer** | **string** | Footer of the campaign | [default to null]
-**Sender** | [***GetExtendedCampaignOverviewSender**](getExtendedCampaignOverview_sender.md) |  | [default to null]
+**Sender** | [***GetExtendedCampaignOverviewSender**](GetExtendedCampaignOverviewSender.md) |  | [default to null]
 **ReplyTo** | **string** | Email defined as the \&quot;Reply to\&quot; of the campaign | [default to null]
 **ToField** | **string** | Customisation of the \&quot;to\&quot; field of the campaign | [optional] [default to null]
 **HtmlContent** | **string** | HTML content of the campaign | [default to null]
@@ -37,8 +37,8 @@ Name | Type | Description | Notes
 **Recurring** | **bool** | FOR TRIGGER ONLY ! Type of trigger campaign.recurring &#x3D; false means contact can receive the same Trigger campaign only once, &amp; recurring &#x3D; true means contact can receive the same Trigger campaign several times | [optional] [default to null]
 **SentDate** | **string** | Sent UTC date-time of the campaign (YYYY-MM-DDTHH:mm:ss.SSSZ). Only available if &#39;status&#39; of the campaign is &#39;sent&#39; | [optional] [default to null]
 **ReturnBounce** | **int64** | Total number of non-delivered campaigns for a particular campaign id. | [optional] [default to null]
-**Recipients** | [**map[string]interface{}**](interface{}.md) |  | [default to null]
-**Statistics** | [**map[string]interface{}**](interface{}.md) |  | [default to null]
+**Recipients** | [**map[string]interface{}**] |  | [default to null]
+**Statistics** | [**map[string]interface{}**] |  | [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

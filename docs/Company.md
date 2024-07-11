@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** | Unique company id | [optional] [default to null]
-**Attributes** | [**map[string]interface{}**](interface{}.md) | Company attributes with values | [optional] [default to null]
+**Attributes** | [**map[string]interface{}**] | Company attributes with values | [optional] [default to null]
 **LinkedContactsIds** | **[]int32** | Contact ids for contacts linked to this company | [optional] [default to null]
 **LinkedDealsIds** | **[]string** | Deals ids for companies linked to this company | [optional] [default to null]
 

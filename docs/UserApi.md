@@ -49,7 +49,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetInvitedUsersList**](getInvitedUsersList.md)
+[**GetInvitedUsersList**](GetInvitedUsersList.md)
 
 ### Authorization
 
@@ -75,7 +75,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetUserPermission**](getUserPermission.md)
+[**GetUserPermission**](GetUserPermission.md)
 
 ### Authorization
 
@@ -103,7 +103,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Inviteuser**](inviteuser.md)
+[**Inviteuser**](Inviteuser.md)
 
 ### Authorization
 
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PutRevokeUserPermission**](putRevokeUserPermission.md)
+[**PutRevokeUserPermission**](PutRevokeUserPermission.md)
 
 ### Authorization
 
@@ -156,7 +156,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Putresendcancelinvitation**](putresendcancelinvitation.md)
+[**Putresendcancelinvitation**](Putresendcancelinvitation.md)
 
 ### Authorization
 

@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Tag** | **string** | Tag of the template | [optional] [default to null]
-**Sender** | [***UpdateSmtpTemplateSender**](updateSmtpTemplate_sender.md) |  | [optional] [default to null]
+**Sender** | [***UpdateSmtpTemplateSender**](UpdateSmtpTemplateSender.md) |  | [optional] [default to null]
 **TemplateName** | **string** | Name of the template | [optional] [default to null]
 **HtmlContent** | **string** | Required if htmlUrl is empty. If the template is designed using Drag &amp; Drop editor via HTML content, then the design page will not have Drag &amp; Drop editor access for that template. Body of the message (HTML must have more than 10 characters) | [optional] [default to null]
 **HtmlUrl** | **string** | Required if htmlContent is empty. URL to the body of the email (HTML) | [optional] [default to null]

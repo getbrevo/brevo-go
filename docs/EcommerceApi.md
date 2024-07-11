@@ -118,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateUpdateBatchProductsModel**](createUpdateBatchProductsModel.md)
+[**CreateUpdateBatchProductsModel**](CreateUpdateBatchProductsModel.md)
 
 ### Authorization
 
@@ -144,7 +144,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateCategoryModel**](createCategoryModel.md)
+[**CreateCategoryModel**](CreateCategoryModel.md)
 
 ### Authorization
 
@@ -170,7 +170,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateProductModel**](createProductModel.md)
+[**CreateProductModel**](CreateProductModel.md)
 
 ### Authorization
 
@@ -221,7 +221,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2006**](inline_response_200_6.md)
+[**InlineResponse2006**](InlineResponse2006.md)
 
 ### Authorization
 
@@ -256,7 +256,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2005**](inline_response_200_5.md)
+[**InlineResponse2005**](InlineResponse2005.md)
 
 ### Authorization
 
@@ -283,7 +283,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2007**](inline_response_200_7.md)
+[**InlineResponse2007**](InlineResponse2007.md)
 
 ### Authorization
 
@@ -305,7 +305,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**InlineResponse2004**](inline_response_200_4.md)
+[**InlineResponse2004**](InlineResponse2004.md)
 
 ### Authorization
 
@@ -344,7 +344,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCategories**](getCategories.md)
+[**GetCategories**](GetCategories.md)
 
 ### Authorization
 
@@ -370,7 +370,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCategoryDetails**](getCategoryDetails.md)
+[**GetCategoryDetails**](GetCategoryDetails.md)
 
 ### Authorization
 
@@ -409,7 +409,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetOrders**](getOrders.md)
+[**GetOrders**](GetOrders.md)
 
 ### Authorization
 
@@ -435,7 +435,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetProductDetails**](getProductDetails.md)
+[**GetProductDetails**](GetProductDetails.md)
 
 ### Authorization
 
@@ -481,7 +481,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetProducts**](getProducts.md)
+[**GetProducts**](GetProducts.md)
 
 ### Authorization
 
@@ -507,7 +507,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SetConfigDisplayCurrency**](setConfigDisplayCurrency.md)
+[**SetConfigDisplayCurrency**](SetConfigDisplayCurrency.md)
 
 ### Authorization
 

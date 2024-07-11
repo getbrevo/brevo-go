@@ -73,7 +73,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CorporateGroupDetailsResponse**](corporateGroupDetailsResponse.md)
+[**CorporateGroupDetailsResponse**](CorporateGroupDetailsResponse.md)
 
 ### Authorization
 
@@ -130,7 +130,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse201**](inline_response_201.md)
+[**InlineResponse201**](InlineResponse201.md)
 
 ### Authorization
 
@@ -183,7 +183,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**MasterDetailsResponse**](masterDetailsResponse.md)
+[**MasterDetailsResponse**](MasterDetailsResponse.md)
 
 ### Authorization
 
@@ -211,7 +211,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSsoToken**](getSsoToken.md)
+[**GetSsoToken**](GetSsoToken.md)
 
 ### Authorization
 
@@ -240,7 +240,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SubAccountsResponse**](subAccountsResponse.md)
+[**SubAccountsResponse**](SubAccountsResponse.md)
 
 ### Authorization
 
@@ -323,7 +323,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SubAccountDetailsResponse**](subAccountDetailsResponse.md)
+[**SubAccountDetailsResponse**](SubAccountDetailsResponse.md)
 
 ### Authorization
 
@@ -380,7 +380,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[*map[string]interface{}**](interface{}.md)
+[*map[string]interface{}**]
 
 ### Authorization
 
@@ -436,7 +436,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateApiKeyResponse**](createApiKeyResponse.md)
+[**CreateApiKeyResponse**](CreateApiKeyResponse.md)
 
 ### Authorization
 
@@ -464,7 +464,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateSubAccountResponse**](createSubAccountResponse.md)
+[**CreateSubAccountResponse**](CreateSubAccountResponse.md)
 
 ### Authorization
 
@@ -492,7 +492,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSsoToken**](getSsoToken.md)
+[**GetSsoToken**](GetSsoToken.md)
 
 ### Authorization
 
@@ -521,7 +521,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse200**](inline_response_200.md)
+[**InlineResponse200**](InlineResponse200.md)
 
 ### Authorization
 
@@ -585,7 +585,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAccountActivity**](getAccountActivity.md)
+[**GetAccountActivity**](GetAccountActivity.md)
 
 ### Authorization
 
@@ -609,7 +609,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetCorporateInvitedUsersList**](getCorporateInvitedUsersList.md)
+[**GetCorporateInvitedUsersList**](GetCorporateInvitedUsersList.md)
 
 ### Authorization
 
@@ -635,7 +635,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCorporateUserPermission**](getCorporateUserPermission.md)
+[**GetCorporateUserPermission**](GetCorporateUserPermission.md)
 
 ### Authorization
 
@@ -659,7 +659,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**[]InlineResponse2001**](inline_response_200_1.md)
+[**[]InlineResponse2001**](InlineResponse2001.md)
 
 ### Authorization
 
@@ -687,7 +687,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InviteAdminUser**](inviteAdminUser.md)
+[**InviteAdminUser**](InviteAdminUser.md)
 
 ### Authorization
 

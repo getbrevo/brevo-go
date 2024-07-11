@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **CreatedAt** | **int64** | Timestamp in milliseconds. | [optional] [default to null]
 **IsPushed** | **bool** | &#x60;true&#x60; for pushed messages | [optional] [default to null]
 **ReceivedFrom** | **string** | In two-way integrations, messages sent via REST API can be marked with receivedFrom property and then filtered out when received in a webhook to avoid infinite loop. | [optional] [default to null]
-**File** | [***ConversationsMessageFile**](ConversationsMessage_file.md) |  | [optional] [default to null]
+**File** | [***ConversationsMessageFile**](ConversationsMessageFile.md) |  | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

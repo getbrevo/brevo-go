@@ -9,8 +9,8 @@ Name | Type | Description | Notes
 **Type_** | **string** | Type of the webhook | [optional] [default to null]
 **Domain** | **string** | Inbound domain of webhook, required in case of event type &#x60;inbound&#x60; | [optional] [default to null]
 **Batched** | **bool** | To send batched webhooks | [optional] [default to null]
-**Auth** | [***GetWebhookAuth**](getWebhook_auth.md) |  | [optional] [default to null]
-**Headers** | [**[]GetWebhookHeaders**](getWebhook_headers.md) | Custom headers to be send with webhooks | [optional] [default to null]
+**Auth** | [***GetWebhookAuth**](GetWebhookAuth.md) |  | [optional] [default to null]
+**Headers** | [**[]GetWebhookHeaders**](GetWebhookHeaders.md) | Custom headers to be send with webhooks | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

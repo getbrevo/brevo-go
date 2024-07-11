@@ -26,7 +26,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2015**](inline_response_201_5.md)
+[**InlineResponse2015**](InlineResponse2015.md)
 
 ### Authorization
 
@@ -95,7 +95,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetAllExternalFeeds**](getAllExternalFeeds.md)
+[**GetAllExternalFeeds**](GetAllExternalFeeds.md)
 
 ### Authorization
 
@@ -123,7 +123,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetExternalFeedByUuid**](getExternalFeedByUUID.md)
+[**GetExternalFeedByUuid**](GetExternalFeedByUUID.md)
 
 ### Authorization
 

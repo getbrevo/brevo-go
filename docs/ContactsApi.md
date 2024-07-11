@@ -49,7 +49,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PostContactInfo**](postContactInfo.md)
+[**PostContactInfo**](PostContactInfo.md)
 
 ### Authorization
 
@@ -103,7 +103,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateUpdateContactModel**](createUpdateContactModel.md)
+[**CreateUpdateContactModel**](CreateUpdateContactModel.md)
 
 ### Authorization
 
@@ -155,7 +155,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](createModel.md)
+[**CreateModel**](CreateModel.md)
 
 ### Authorization
 
@@ -308,7 +308,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetAttributes**](getAttributes.md)
+[**GetAttributes**](GetAttributes.md)
 
 ### Authorization
 
@@ -346,7 +346,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetExtendedContactDetails**](getExtendedContactDetails.md)
+[**GetExtendedContactDetails**](GetExtendedContactDetails.md)
 
 ### Authorization
 
@@ -382,7 +382,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetContactCampaignStats**](getContactCampaignStats.md)
+[**GetContactCampaignStats**](GetContactCampaignStats.md)
 
 ### Authorization
 
@@ -422,7 +422,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetContacts**](getContacts.md)
+[**GetContacts**](GetContacts.md)
 
 ### Authorization
 
@@ -460,7 +460,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetContacts**](getContacts.md)
+[**GetContacts**](GetContacts.md)
 
 ### Authorization
 
@@ -486,7 +486,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolder**](getFolder.md)
+[**GetFolder**](GetFolder.md)
 
 ### Authorization
 
@@ -523,7 +523,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolderLists**](getFolderLists.md)
+[**GetFolderLists**](GetFolderLists.md)
 
 ### Authorization
 
@@ -560,7 +560,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetFolders**](getFolders.md)
+[**GetFolders**](GetFolders.md)
 
 ### Authorization
 
@@ -596,7 +596,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetExtendedList**](getExtendedList.md)
+[**GetExtendedList**](GetExtendedList.md)
 
 ### Authorization
 
@@ -631,7 +631,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetLists**](getLists.md)
+[**GetLists**](GetLists.md)
 
 ### Authorization
 
@@ -668,7 +668,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSegments**](getSegments.md)
+[**GetSegments**](GetSegments.md)
 
 ### Authorization
 
@@ -696,7 +696,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](createdProcessId.md)
+[**CreatedProcessId**](CreatedProcessId.md)
 
 ### Authorization
 
@@ -723,7 +723,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PostContactInfo**](postContactInfo.md)
+[**PostContactInfo**](PostContactInfo.md)
 
 ### Authorization
 
@@ -751,7 +751,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](createdProcessId.md)
+[**CreatedProcessId**](CreatedProcessId.md)
 
 ### Authorization
 

@@ -9,8 +9,8 @@ Name | Type | Description | Notes
 **OpenRate** | **string** | Open rate for current winning version | [optional] [default to null]
 **ClickRate** | **string** | Click rate for current winning version | [optional] [default to null]
 **WinningVersionRate** | **string** | Open/Click rate for the winner version | [optional] [default to null]
-**Statistics** | [***AbTestCampaignResultStatistics**](abTestCampaignResult_statistics.md) |  | [optional] [default to null]
-**ClickedLinks** | [***AbTestCampaignResultClickedLinks**](abTestCampaignResult_clickedLinks.md) |  | [optional] [default to null]
+**Statistics** | [***AbTestCampaignResultStatistics**](AbTestCampaignResultStatistics.md) |  | [optional] [default to null]
+**ClickedLinks** | [***AbTestCampaignResultClickedLinks**](AbTestCampaignResultClickedLinks.md) |  | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

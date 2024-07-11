@@ -37,7 +37,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetWhatsappEventReport**](getWhatsappEventReport.md)
+[**GetWhatsappEventReport**](GetWhatsappEventReport.md)
 
 ### Authorization
 

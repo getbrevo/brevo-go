@@ -32,7 +32,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateModel**](createModel.md)
+[**CreateModel**](CreateModel.md)
 
 ### Authorization
 
@@ -93,7 +93,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreatedProcessId**](createdProcessId.md)
+[**CreatedProcessId**](CreatedProcessId.md)
 
 ### Authorization
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AbTestCampaignResult**](abTestCampaignResult.md)
+[**AbTestCampaignResult**](AbTestCampaignResult.md)
 
 ### Authorization
 
@@ -156,7 +156,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetEmailCampaign**](getEmailCampaign.md)
+[**GetEmailCampaign**](GetEmailCampaign.md)
 
 ### Authorization
 
@@ -197,7 +197,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetEmailCampaigns**](getEmailCampaigns.md)
+[**GetEmailCampaigns**](GetEmailCampaigns.md)
 
 ### Authorization
 
@@ -225,7 +225,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSharedTemplateUrl**](getSharedTemplateUrl.md)
+[**GetSharedTemplateUrl**](GetSharedTemplateUrl.md)
 
 ### Authorization
 
@@ -387,7 +387,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UploadImageModel**](uploadImageModel.md)
+[**UploadImageModel**](UploadImageModel.md)
 
 ### Authorization
 
