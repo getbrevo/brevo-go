@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -10,29 +10,13 @@
 
 package lib
 
-import (
-	"time"
-)
-
 type Body7 struct {
-	// Name of task
-	Name string `json:"name,omitempty"`
-	// Duration of task in milliseconds [1 minute = 60000 ms]
-	Duration int32 `json:"duration,omitempty"`
-	// Id for type of task e.g Call / Email / Meeting etc.
-	TaskTypeId string `json:"taskTypeId,omitempty"`
-	// Task date/time
-	Date time.Time `json:"date,omitempty"`
-	// Notes added to a task
-	Notes string `json:"notes,omitempty"`
-	// Task marked as done
-	Done bool `json:"done,omitempty"`
-	// User id to whom task is assigned
-	AssignToId string `json:"assignToId,omitempty"`
-	// Contact ids for contacts linked to this task
-	ContactsIds []int32 `json:"contactsIds,omitempty"`
-	// Deal ids for deals a task is linked to
-	DealsIds []string `json:"dealsIds,omitempty"`
-	// Companies ids for companies a task is linked to
-	CompaniesIds []string `json:"companiesIds,omitempty"`
+	// Contact ids for contacts to be linked with company
+	LinkContactIds []int64 `json:"linkContactIds,omitempty"`
+	// Contact ids for contacts to be unlinked from company
+	UnlinkContactIds []int64 `json:"unlinkContactIds,omitempty"`
+	// Deals ids for deals to be linked with company
+	LinkDealsIds []string `json:"linkDealsIds,omitempty"`
+	// Deals ids for deals to be unlinked from company
+	UnlinkDealsIds []string `json:"unlinkDealsIds,omitempty"`
 }

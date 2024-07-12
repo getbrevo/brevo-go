@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**AuthenticateDomain**](DomainsApi.md#AuthenticateDomain) | **Put** /senders/domains/{domainName}/authenticate | Authenticate a domain
 [**CreateDomain**](DomainsApi.md#CreateDomain) | **Post** /senders/domains | Create a new domain
 [**DeleteDomain**](DomainsApi.md#DeleteDomain) | **Delete** /senders/domains/{domainName} | Delete a domain
-[**GetDomainonfiguration**](DomainsApi.md#GetDomainonfiguration) | **Get** /senders/domains/{domainName} | Validate domain configuration
+[**GetDomainConfiguration**](DomainsApi.md#GetDomainConfiguration) | **Get** /senders/domains/{domainName} | Validate domain configuration
 [**GetDomains**](DomainsApi.md#GetDomains) | **Get** /senders/domains | Get the list of all your domains
 
 
@@ -96,8 +96,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GetDomainonfiguration**
-> GetDomainonfigurationModel GetDomainonfiguration(ctx, domainName)
+# **GetDomainConfiguration**
+> GetDomainConfigurationModel GetDomainConfiguration(ctx, domainName)
 Validate domain configuration
 
 ### Required Parameters
@@ -109,7 +109,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetDomainonfigurationModel**](GetDomainonfigurationModel.md)
+[**GetDomainConfigurationModel**](GetDomainConfigurationModel.md)
 
 ### Authorization
 

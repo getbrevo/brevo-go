@@ -81,7 +81,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetSmsCampaign**](getSmsCampaign.md)
+[**GetSmsCampaign**](GetSmsCampaign.md)
 
 ### Authorization
 

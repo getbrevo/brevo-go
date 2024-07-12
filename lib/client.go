@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -54,6 +54,8 @@ type APIClient struct {
 
 	ConversationsApi *ConversationsApiService
 
+	CouponsApi *CouponsApiService
+
 	DealsApi *DealsApiService
 
 	DomainsApi *DomainsApiService
@@ -61,6 +63,8 @@ type APIClient struct {
 	EcommerceApi *EcommerceApiService
 
 	EmailCampaignsApi *EmailCampaignsApiService
+
+	EventsApi *EventsApiService
 
 	ExternalFeedsApi *ExternalFeedsApiService
 
@@ -71,6 +75,8 @@ type APIClient struct {
 	MasterAccountApi *MasterAccountApiService
 
 	NotesApi *NotesApiService
+
+	PaymentsApi *PaymentsApiService
 
 	ProcessApi *ProcessApiService
 
@@ -87,6 +93,8 @@ type APIClient struct {
 	TransactionalSMSApi *TransactionalSMSApiService
 
 	TransactionalWhatsAppApi *TransactionalWhatsAppApiService
+
+	UserApi *UserApiService
 
 	WebhooksApi *WebhooksApiService
 
@@ -113,15 +121,18 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.CompaniesApi = (*CompaniesApiService)(&c.common)
 	c.ContactsApi = (*ContactsApiService)(&c.common)
 	c.ConversationsApi = (*ConversationsApiService)(&c.common)
+	c.CouponsApi = (*CouponsApiService)(&c.common)
 	c.DealsApi = (*DealsApiService)(&c.common)
 	c.DomainsApi = (*DomainsApiService)(&c.common)
 	c.EcommerceApi = (*EcommerceApiService)(&c.common)
 	c.EmailCampaignsApi = (*EmailCampaignsApiService)(&c.common)
+	c.EventsApi = (*EventsApiService)(&c.common)
 	c.ExternalFeedsApi = (*ExternalFeedsApiService)(&c.common)
 	c.FilesApi = (*FilesApiService)(&c.common)
 	c.InboundParsingApi = (*InboundParsingApiService)(&c.common)
 	c.MasterAccountApi = (*MasterAccountApiService)(&c.common)
 	c.NotesApi = (*NotesApiService)(&c.common)
+	c.PaymentsApi = (*PaymentsApiService)(&c.common)
 	c.ProcessApi = (*ProcessApiService)(&c.common)
 	c.ResellerApi = (*ResellerApiService)(&c.common)
 	c.SMSCampaignsApi = (*SMSCampaignsApiService)(&c.common)
@@ -130,6 +141,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.TransactionalEmailsApi = (*TransactionalEmailsApiService)(&c.common)
 	c.TransactionalSMSApi = (*TransactionalSMSApiService)(&c.common)
 	c.TransactionalWhatsAppApi = (*TransactionalWhatsAppApiService)(&c.common)
+	c.UserApi = (*UserApiService)(&c.common)
 	c.WebhooksApi = (*WebhooksApiService)(&c.common)
 	c.WhatsAppCampaignsApi = (*WhatsAppCampaignsApiService)(&c.common)
 

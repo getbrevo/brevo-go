@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -13,12 +13,11 @@ package lib
 import (
 	"context"
 	"fmt"
+	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -283,7 +282,6 @@ ContactsApiService Create a contact
 @return CreateUpdateContactModel
 */
 func (a *ContactsApiService) CreateContact(ctx context.Context, createContact CreateContact) (CreateUpdateContactModel, *http.Response, error) {
-
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
@@ -1651,6 +1649,9 @@ ContactsApiService Get all the contacts
      * @param "ModifiedSince" (optional.String) -  Filter (urlencoded) the contacts modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). Prefer to pass your timezone in date-time format for accurate result.
      * @param "CreatedSince" (optional.String) -  Filter (urlencoded) the contacts created after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ). Prefer to pass your timezone in date-time format for accurate result.
      * @param "Sort" (optional.String) -  Sort the results in the ascending/descending order of record creation. Default order is **descending** if &#x60;sort&#x60; is not passed
+     * @param "SegmentId" (optional.Int64) -  Id of the segment. **Either listIds or segmentId can be passed.**
+     * @param "ListIds" (optional.Interface of []int64) -  Ids of the list. **Either listIds or segmentId can be passed.**
+     * @param "Filter" (optional.String) -  Filter the contacts on the basis of attributes. **Allowed operator: equals. (e.g. filter&#x3D;equals(FIRSTNAME,\&quot;Antoine\&quot;), filter&#x3D;equals(B1, true), filter&#x3D;equals(DOB, \&quot;1989-11-23\&quot;))**
 
 @return GetContacts
 */
@@ -1661,6 +1662,9 @@ type GetContactsOpts struct {
 	ModifiedSince optional.String
 	CreatedSince  optional.String
 	Sort          optional.String
+	SegmentId     optional.Int64
+	ListIds       optional.Interface
+	Filter        optional.String
 }
 
 func (a *ContactsApiService) GetContacts(ctx context.Context, localVarOptionals *GetContactsOpts) (GetContacts, *http.Response, error) {
@@ -1693,6 +1697,15 @@ func (a *ContactsApiService) GetContacts(ctx context.Context, localVarOptionals 
 	}
 	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
 		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.SegmentId.IsSet() {
+		localVarQueryParams.Add("segmentId", parameterToString(localVarOptionals.SegmentId.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.ListIds.IsSet() {
+		localVarQueryParams.Add("listIds", parameterToString(localVarOptionals.ListIds.Value(), "csv"))
+	}
+	if localVarOptionals != nil && localVarOptionals.Filter.IsSet() {
+		localVarQueryParams.Add("filter", parameterToString(localVarOptionals.Filter.Value(), ""))
 	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
@@ -2393,12 +2406,21 @@ func (a *ContactsApiService) GetFolders(ctx context.Context, limit int64, offset
 
 /*
 ContactsApiService Get a list&#39;s details
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param listId Id of the list
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param listId Id of the list
+ * @param optional nil or *GetListOpts - Optional Parameters:
+     * @param "StartDate" (optional.String) -  Mandatory if endDate is used. Ending (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a specific list id.Prefer to pass your timezone in date-time format for accurate result
+     * @param "EndDate" (optional.String) -  Mandatory if startDate is used. Ending (urlencoded) UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ) to aggregate the sent email campaigns for a specific list id.Prefer to pass your timezone in date-time format for accurate result
 
 @return GetExtendedList
 */
-func (a *ContactsApiService) GetList(ctx context.Context, listId int64) (GetExtendedList, *http.Response, error) {
+
+type GetListOpts struct {
+	StartDate optional.String
+	EndDate   optional.String
+}
+
+func (a *ContactsApiService) GetList(ctx context.Context, listId int64, localVarOptionals *GetListOpts) (GetExtendedList, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -2415,6 +2437,12 @@ func (a *ContactsApiService) GetList(ctx context.Context, listId int64) (GetExte
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.StartDate.IsSet() {
+		localVarQueryParams.Add("startDate", parameterToString(localVarOptionals.StartDate.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.EndDate.IsSet() {
+		localVarQueryParams.Add("endDate", parameterToString(localVarOptionals.EndDate.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -2815,7 +2843,7 @@ func (a *ContactsApiService) GetSegments(ctx context.Context, limit int64, offse
 
 /*
 ContactsApiService Import contacts
-It returns the background process ID which on completion calls the notify URL that you have set in the input.
+It returns the background process ID which on completion calls the notify URL that you have set in the input.  **Note**: - Any contact attribute that doesn&#39;t exist in your account will be ignored at import end.
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
   - @param requestContactImport Values to import contacts in Brevo. To know more about the expected format, please have a look at &#x60;&#x60;https://help.brevo.com/hc/en-us/articles/209499265-Build-contacts-lists-for-your-email-marketing-campaigns&#x60;&#x60;
 

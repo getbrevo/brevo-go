@@ -137,7 +137,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SendSms**](SendSms.md)
+[**SendSms**](sendSms.md)
 
 ### Authorization
 

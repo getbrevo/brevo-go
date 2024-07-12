@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -17,8 +17,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -34,7 +32,7 @@ We recommend pinging this endpoint every minute for as long as the agent has to 
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
   - @param body Agent fields.
 */
-func (a *ConversationsApiService) ConversationsAgentOnlinePingPost(ctx context.Context, body Body12) (*http.Response, error) {
+func (a *ConversationsApiService) ConversationsAgentOnlinePingPost(ctx context.Context, body Body17) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -390,7 +388,7 @@ Only agents’ messages can be edited.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param id ID of the message
  * @param optional nil or *ConversationsMessagesIdPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Body9) -
+     * @param "Body" (optional.Interface of Body14) -
 
 @return ConversationsMessage
 */
@@ -436,9 +434,9 @@ func (a *ConversationsApiService) ConversationsMessagesIdPut(ctx context.Context
 	// body params
 	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
 
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Body9)
+		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Body14)
 		if !localVarOptionalBodyok {
-			return localVarReturnValue, nil, reportError("body should be Body9")
+			return localVarReturnValue, nil, reportError("body should be Body14")
 		}
 		localVarPostBody = &localVarOptionalBody
 	}
@@ -544,7 +542,7 @@ ConversationsApiService Send a message as an agent
 
 @return ConversationsMessage
 */
-func (a *ConversationsApiService) ConversationsMessagesPost(ctx context.Context, body Body8) (ConversationsMessage, *http.Response, error) {
+func (a *ConversationsApiService) ConversationsMessagesPost(ctx context.Context, body Body13) (ConversationsMessage, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
@@ -921,7 +919,7 @@ ConversationsApiService Update an automated message
 
 @return ConversationsMessage
 */
-func (a *ConversationsApiService) ConversationsPushedMessagesIdPut(ctx context.Context, id string, body Body11) (ConversationsMessage, *http.Response, error) {
+func (a *ConversationsApiService) ConversationsPushedMessagesIdPut(ctx context.Context, id string, body Body16) (ConversationsMessage, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Put")
 		localVarPostBody    interface{}
@@ -1060,7 +1058,7 @@ Example of automated messages: order status, announce new features in your web a
 
 @return ConversationsMessage
 */
-func (a *ConversationsApiService) ConversationsPushedMessagesPost(ctx context.Context, body Body10) (ConversationsMessage, *http.Response, error) {
+func (a *ConversationsApiService) ConversationsPushedMessagesPost(ctx context.Context, body Body15) (ConversationsMessage, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}

@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -13,12 +13,11 @@ package lib
 import (
 	"context"
 	"fmt"
+	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -561,7 +560,7 @@ CompaniesApiService Update a company
 
 @return Company
 */
-func (a *CompaniesApiService) CompaniesIdPatch(ctx context.Context, id string, body Body1) (Company, *http.Response, error) {
+func (a *CompaniesApiService) CompaniesIdPatch(ctx context.Context, id string, body Body6) (Company, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Patch")
 		localVarPostBody    interface{}
@@ -698,7 +697,7 @@ CompaniesApiService Link and Unlink company with contacts and deals
   - @param id
   - @param body Linked / Unlinked contacts and deals ids.
 */
-func (a *CompaniesApiService) CompaniesLinkUnlinkIdPatch(ctx context.Context, id string, body Body2) (*http.Response, error) {
+func (a *CompaniesApiService) CompaniesLinkUnlinkIdPatch(ctx context.Context, id string, body Body7) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Patch")
 		localVarPostBody   interface{}
@@ -803,15 +802,15 @@ CompaniesApiService Create a company
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
   - @param body Company create data.
 
-@return InlineResponse200
+@return InlineResponse2002
 */
-func (a *CompaniesApiService) CompaniesPost(ctx context.Context, body Body) (InlineResponse200, *http.Response, error) {
+func (a *CompaniesApiService) CompaniesPost(ctx context.Context, body Body5) (InlineResponse2002, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue InlineResponse200
+		localVarReturnValue InlineResponse2002
 	)
 
 	// create path and map variables
@@ -897,7 +896,7 @@ func (a *CompaniesApiService) CompaniesPost(ctx context.Context, body Body) (Inl
 		}
 
 		if localVarHttpResponse.StatusCode == 200 {
-			var v InlineResponse200
+			var v InlineResponse2002
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

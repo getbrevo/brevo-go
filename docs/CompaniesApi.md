@@ -136,7 +136,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **id** | **string**|  | 
-  **body** | [**Body1**](Body1.md)| Updated company details. | 
+  **body** | [**Body6**](Body6.md)| Updated company details. | 
 
 ### Return type
 
@@ -163,7 +163,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **id** | **string**|  | 
-  **body** | [**Body2**](Body2.md)| Linked / Unlinked contacts and deals ids. | 
+  **body** | [**Body7**](Body7.md)| Linked / Unlinked contacts and deals ids. | 
 
 ### Return type
 
@@ -181,7 +181,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **CompaniesPost**
-> InlineResponse200 CompaniesPost(ctx, body)
+> InlineResponse2002 CompaniesPost(ctx, body)
 Create a company
 
 ### Required Parameters
@@ -189,11 +189,11 @@ Create a company
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Body**](Body.md)| Company create data. | 
+  **body** | [**Body5**](Body5.md)| Company create data. | 
 
 ### Return type
 
-[**InlineResponse200**](inlineResponse200.md)
+[**InlineResponse2002**](inline_response_200_2.md)
 
 ### Authorization
 

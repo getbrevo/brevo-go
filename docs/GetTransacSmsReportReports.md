@@ -11,8 +11,9 @@ Name | Type | Description | Notes
 **Blocked** | **int64** | Number of blocked contact for the date | [optional] [default to null]
 **Unsubscribed** | **int64** | Number of unsubscription for the date | [optional] [default to null]
 **Replied** | **int64** | Number of answered SMS for the date | [optional] [default to null]
-**Accepted** | **int64** | Number of accepted for the date | [optional] [default to null]
-**Rejected** | **int64** | Number of rejected for the date | [optional] [default to null]
+**Accepted** | **int64** | Number of accepted SMS for the date | [optional] [default to null]
+**Rejected** | **int64** | Number of rejected SMS for the date | [optional] [default to null]
+**Skipped** | **int64** | Number of skipped SMS for the date | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

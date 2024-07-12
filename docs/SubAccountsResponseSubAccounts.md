@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **CompanyName** | **string** | Name of the sub-account company | [default to null]
 **Active** | **bool** | Whether the sub-account is active or not | [default to null]
 **CreatedAt** | **int64** | Timestamp when the sub-account was created | [default to null]
+**Groups** | [**[]SubAccountsResponseGroups**](SubAccountsResponseGroups.md) | Group details | [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

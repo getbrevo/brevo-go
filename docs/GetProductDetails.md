@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **ParentId** | **string** | Parent product id of the product | [optional] [default to null]
 **S3Original** | **string** | S3 url of original image | [optional] [default to null]
 **S3ThumbAnalytics** | **string** | S3 thumbnail url of original image in 120x120 dimension for analytics section | [default to null]
-**MetaInfo** | **map[string]interface{}** | Meta data of product such as description, vendor, producer, stock level, etc. | [optional] [default to null]
+**MetaInfo** | [**map[string]interface{}**]| Meta data of product such as description, vendor, producer, stock level, etc. | [optional] [default to null]
 **S3ThumbEditor** | **string** | S3 thumbnail url of original image in 600x400 dimension for editor section | [default to null]
 **IsDeleted** | **bool** | product deleted from the shop&#39;s database | [optional] [default to null]
 

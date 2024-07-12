@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **Subject** | **string** | Subject of the template | [default to null]
 **IsActive** | **bool** | Status of template (true&#x3D;active, false&#x3D;inactive) | [default to null]
 **TestSent** | **bool** | Status of test sending for the template (true&#x3D;test email has been sent, false&#x3D;test email has not been sent) | [default to null]
-**Sender** | [***GetSmtpTemplateOverviewSender**](getSmtpTemplateOverviewSender.md) |  | [default to null]
+**Sender** | [***GetSmtpTemplateOverviewSender**](GetSmtpTemplateOverviewSender.md) |  | [default to null]
 **ReplyTo** | **string** | Email defined as the \&quot;Reply to\&quot; for the template | [default to null]
 **ToField** | **string** | Customisation of the \&quot;to\&quot; field for the template | [default to null]
 **Tag** | **string** | Tag of the template | [default to null]

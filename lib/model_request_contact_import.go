@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -16,7 +16,7 @@ type RequestContactImport struct {
 	// Mandatory if fileUrl and jsonBody is not defined. CSV content to be imported. Use semicolon to separate multiple attributes. Maximum allowed file body size is 10MB . However we recommend a safe limit of around 8 MB to avoid the issues caused due to increase of file body size while parsing. Please use fileUrl instead to import bigger files.
 	FileBody string `json:"fileBody,omitempty"`
 	// **Mandatory if fileUrl and fileBody is not defined.** JSON content to be imported. **Maximum allowed json body size is 10MB** . However we recommend a safe limit of around 8 MB to avoid the issues caused due to increase of json body size while parsing. Please use fileUrl instead to import bigger files.
-	JsonBody []map[string]interface{} `json:"jsonBody,omitempty"`
+	JsonBody []RequestContactImportJsonBody `json:"jsonBody,omitempty"`
 	// Mandatory if newList is not defined. Ids of the lists in which the contacts shall be imported. For example, [2, 4, 7].
 	ListIds []int64 `json:"listIds,omitempty"`
 	// URL that will be called once the import process is finished. For reference, https://help.brevo.com/hc/en-us/articles/360007666479
@@ -24,12 +24,12 @@ type RequestContactImport struct {
 	NewList   *RequestContactImportNewList `json:"newList,omitempty"`
 	// To blacklist all the contacts for email
 	EmailBlacklist bool `json:"emailBlacklist,omitempty"`
+	// To disable email notification
+	DisableNotification bool `json:"disableNotification,omitempty"`
 	// To blacklist all the contacts for sms
 	SmsBlacklist bool `json:"smsBlacklist,omitempty"`
 	// To facilitate the choice to update the existing contacts
 	UpdateExistingContacts bool `json:"updateExistingContacts,omitempty"`
 	// To facilitate the choice to erase any attribute of the existing contacts with empty value. emptyContactsAttributes = true means the empty fields in your import will erase any attribute that currently contain data in Brevo, & emptyContactsAttributes = false means the empty fields will not affect your existing data ( only available if `updateExistingContacts` set to true )
 	EmptyContactsAttributes bool `json:"emptyContactsAttributes,omitempty"`
-	// To disable email notification
-	DisableNotification bool `json:"disableNotification,omitempty"`
 }

@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 
 # **CreateExternalFeed**
-> InlineResponse2013 CreateExternalFeed(ctx, createExternalFeed)
+> InlineResponse2015 CreateExternalFeed(ctx, createExternalFeed)
 Create an external feed
 
 This endpoint will create an external feed.
@@ -26,7 +26,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse2013**](InlineResponse2013.md)
+[**InlineResponse2015**](InlineResponse2015.md)
 
 ### Authorization
 

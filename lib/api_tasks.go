@@ -1,7 +1,7 @@
 /*
  * Brevo API
  *
- * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |
+ * Brevo provide a RESTFul API that can be used with any languages. With this API, you will be able to :   - Manage your campaigns and get the statistics   - Manage your contacts   - Send transactional Emails and SMS   - and much more...  You can download our wrappers at https://github.com/orgs/brevo  **Possible responses**   | Code | Message |   | :-------------: | ------------- |   | 200  | OK. Successful Request  |   | 201  | OK. Successful Creation |   | 202  | OK. Request accepted |   | 204  | OK. Successful Update/Deletion  |   | 400  | Error. Bad Request  |   | 401  | Error. Authentication Needed  |   | 402  | Error. Not enough credit, plan upgrade needed  |   | 403  | Error. Permission denied  |   | 404  | Error. Object does not exist |   | 405  | Error. Method not allowed  |   | 406  | Error. Not Acceptable  |   | 422  | Error. Unprocessable Entity |
  *
  * API version: 3.0.0
  * Contact: contact@brevo.com
@@ -13,12 +13,11 @@ package lib
 import (
 	"context"
 	"fmt"
+	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -35,7 +34,7 @@ TasksApiService Get all tasks
      * @param "FilterType" (optional.String) -  Filter by task type (ID)
      * @param "FilterStatus" (optional.String) -  Filter by task status
      * @param "FilterDate" (optional.String) -  Filter by date
-     * @param "FilterAssignTo" (optional.String) -  Filter by assignTo id
+     * @param "FilterAssignTo" (optional.String) -  Filter by the \&quot;assignTo\&quot; ID. You can utilize account emails for the \&quot;assignTo\&quot; attribute.
      * @param "FilterContacts" (optional.String) -  Filter by contact ids
      * @param "FilterDeals" (optional.String) -  Filter by deals ids
      * @param "FilterCompanies" (optional.String) -  Filter by companies ids
@@ -477,7 +476,7 @@ TasksApiService Update a task
   - @param id
   - @param body Updated task details.
 */
-func (a *TasksApiService) CrmTasksIdPatch(ctx context.Context, id string, body Body7) (*http.Response, error) {
+func (a *TasksApiService) CrmTasksIdPatch(ctx context.Context, id string, body Body12) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Patch")
 		localVarPostBody   interface{}
@@ -593,15 +592,15 @@ TasksApiService Create a task
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
   - @param body Task name.
 
-@return InlineResponse2011
+@return InlineResponse2012
 */
-func (a *TasksApiService) CrmTasksPost(ctx context.Context, body Body6) (InlineResponse2011, *http.Response, error) {
+func (a *TasksApiService) CrmTasksPost(ctx context.Context, body Body11) (InlineResponse2012, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue InlineResponse2011
+		localVarReturnValue InlineResponse2012
 	)
 
 	// create path and map variables
@@ -687,7 +686,7 @@ func (a *TasksApiService) CrmTasksPost(ctx context.Context, body Body6) (InlineR
 		}
 
 		if localVarHttpResponse.StatusCode == 201 {
-			var v InlineResponse2011
+			var v InlineResponse2012
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
