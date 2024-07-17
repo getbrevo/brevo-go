@@ -1,4 +1,4 @@
-module lib
+module github.com/getbrevo/brevo-go
 
 go 1.22.3
 
