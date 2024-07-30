@@ -11,7 +11,7 @@
 package lib
 
 // Optional. Redirect contact to a custom success page once payment is successful. If empty the default Brevo page will be displayed once a payment is validated
-type Configuration struct {
-	// Absolute URL of the custom success page.
-	CustomSuccessUrl string `json:"customSuccessUrl"`
-}
+// type Configuration struct {
+// 	// Absolute URL of the custom success page.
+// 	CustomSuccessUrl string `json:"customSuccessUrl"`
+// }
