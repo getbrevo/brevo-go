@@ -12,7 +12,6 @@ package lib
 
 import (
 	"context"
-	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -149,13 +148,6 @@ AccountApiService Get user activity logs
 
 @return GetAccountActivity
 */
-
-type GetAccountActivityOpts struct {
-	StartDate optional.String
-	EndDate   optional.String
-	Limit     optional.Int64
-	Offset    optional.Int64
-}
 
 func (a *AccountApiService) GetAccountActivity(ctx context.Context, localVarOptionals *GetAccountActivityOpts) (GetAccountActivity, *http.Response, error) {
 	var (
