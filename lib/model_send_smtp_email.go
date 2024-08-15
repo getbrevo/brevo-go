@@ -42,7 +42,7 @@ type SendSmtpEmail struct {
 	// Tag your emails to find them more easily
 	Tags []string `json:"tags,omitempty"`
 	// UTC date-time on which the email has to schedule (YYYY-MM-DDTHH:mm:ss.SSSZ). Prefer to pass your timezone in date-time format for scheduling. There can be an expected delay of +5 minutes in scheduled email delivery. **Please note this feature is currently a public beta**.
-	ScheduledAt time.Time `json:"scheduledAt,omitempty"`
+	ScheduledAt *time.Time `json:"scheduledAt,omitempty"`
 	// Valid UUIDv4 batch id to identify the scheduled batches transactional email. If not passed we will create a valid UUIDv4 batch id at our end.
 	BatchId string `json:"batchId,omitempty"`
 }
